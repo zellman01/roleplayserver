@@ -26,5 +26,6 @@ const commands = {
     case "legends":
       this.sendReply("This is not finished yet.");
       break;
+	 }
   },
 };
