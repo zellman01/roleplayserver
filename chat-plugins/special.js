@@ -26,6 +26,14 @@ exports.commands = {
 		case "legends":
 			this.sendReply("This is not finished yet.");
 			break;
+		case "rules":
+			this.sendReply("This is not finished yet.");
+			break;
 		}
 	},
+	serverinfohelp: [
+		`/serverinfo <target> - Shows various information on the server`,
+		`!serverinfo <target> - Displays the information to everyone. Requires + $ @ * # & ~.`,
+		`Things that can be shown: groups, legends, rules."`,
+	],
 };
