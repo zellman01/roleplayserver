@@ -1,5 +1,8 @@
 /config/*
 !/config/formats.js
+!/config/config-example.js
+!/config/custom-example.css
+!/config/datacenters.csv
 /logs/*
 /node_modules
 /eslint-cache
