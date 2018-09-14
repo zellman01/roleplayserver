@@ -14,13 +14,13 @@ exports.commands = {
 				`<br />` +
 				`<strong>Global Staff</strong><br />` +
 				`% <strong>Driver</strong> - These are staff members under a trial, so you can call them in a sense a trial moderator.<br />` +
-				`Drivers have some control of the bot, but not much, as well as all of the driver server commands.<br />` +
+				`<strong>Drivers</strong> have some control of the bot, but not much, as well as all of the driver server commands.<br /><br />` +
 				`@ <strong>Moderator</strong> - These are the lowest an actual staff member may be.<br />` +
-				`Moderators have more control over the bot then Drivers, and have mod server commands.<br />` +
+				`<strong>Moderators</strong> have more control over the bot then Drivers, and have mod server commands.<br /><br />` +
 				`& <strong>Leaders</strong> - Lowest upper staff member.<br />` +
-				`Leaders have almost full control of the bot, and can use leader server commands.<br />` +
+				`<strong>Leaders</strong> have almost full control of the bot, and can use leader server commands.<br /><br />` +
 				`~ <strong>Administrators</strong> - Server owners.<br />` +
-				`Administartors have full control of the bot, and the server.`
+				`<strong>Administartors</strong> have full control of the bot, and the server.`
 			);
 			break;
 		case "legends":
@@ -34,6 +34,6 @@ exports.commands = {
 	serverinfohelp: [
 		`/serverinfo <target> - Shows various information on the server`,
 		`!serverinfo <target> - Displays the information to everyone. Requires + $ @ * # & ~.`,
-		`Things that can be shown: groups, legends, rules."`,
+		`Things that can be shown: groups, legends, rules.`,
 	],
 };
