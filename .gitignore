@@ -8,6 +8,7 @@
 /eslint-cache
 /chat-plugins/private.js
 /chat-plugins/*-private.js
+/chat-plugins/legends.js
 npm-debug.log
 .eslintcache
 package-lock.json
