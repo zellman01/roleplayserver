@@ -27,8 +27,22 @@ exports.commands = {
 			this.sendReply("This is not finished yet.");
 			break;
 		case "rules":
-			this.sendReply("This is not finished yet.");
+			this.sendReplyBox(
+				`<ol>` +
+				`<li>Even though this server is dedicated to roleplaying, some rooms (majorly unofficial rooms) will NOT have any roleplaying aspect.` +
+				`If the room does not, it will say somewhere in the room description or roomintro. Please respect that decision.</li>` +
+				`<li>No ERP. Ever. Not even if it's in PMs and you are both adults.</li>` +
+				`<li>Three people may have control of a legend, but only one of that legend can be in a rp. For example, if two people have legend perms` +
+				`for Lugia, only one of them may use Lugia in a roleplay (unless the host says otherwise).</li>` +
+				`<li><b><u>Don't argue with staff. Ever</u></b> (unless both you and the staff member are in an rp and your characters are arguing).` +
+				`If a staff member pauses or stops the rp without an endpoll, they probably have a good reason to do it (Staff, you must give a reason as` +
+				`to why you stop without an endpoll).</li>` +
+				`<li>No god-modding. This will also probably be in all documents as a rule somewhere.</li>` +
+				`</ol>`
+			);
 			break;
+		default:
+				return this.errorReply("Error in command execution. Did you type the command correctly?");
 		}
 	},
 	serverinfohelp: [
