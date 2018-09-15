@@ -53,4 +53,26 @@ exports.commands = {
 		`!serverinfo <target> - Displays the information to everyone. Requires + % @ * # & ~.`,
 		`Things that can be shown: groups, legends, rules.`,
 	],
+	clearall: 'clearroom',
+	clearroom: function (target, room, user) {
+		if (!this.can('forcewin')) return false;
+		if (room.battle) return this.sendReply("You cannot clearall in battle rooms.");
+
+		let len = (room.log.log && room.log.log.length) || 0;
+		let users = [];
+		while (len--) {
+			room.log.log[len] = '';
+		}
+		for (let u in room.users) {
+			if (!Users.get(u) || !Users.get(u).connected) continue;
+			users.push(u);
+			Users(u).leaveRoom(room, Users.get(u).connections[0]);
+		}
+		len = users.length;
+		setTimeout(() => {
+			while (len--) {
+				Users(users[len]).joinRoom(room, Users(users[len]).connections[0]);
+			}
+		}, 1000);
+	},
 };
