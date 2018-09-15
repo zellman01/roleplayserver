@@ -8,8 +8,8 @@ exports.commands = {
 		switch (target) {
 		case "groups":
 			this.sendReplyBox(
-				`There are no room ranks, besides Host and Room Owner.<br />` +
-				`\u2605 <strong>Room Host</strong> - The person currently hosting an RP in that specific room.<br />` +
+				`These are the only ranks used in official rooms on this server<br />` +
+				`\u2605 <strong>Room Host</strong> - The person currently hosting an RP in that specific room.<br /><br />` +
 				`# <strong>Room Owner</strong> - Only given to the bot (except in major cases).<br />` +
 				`<br />` +
 				`<strong>Global Staff</strong><br />` +
@@ -33,7 +33,7 @@ exports.commands = {
 	},
 	serverinfohelp: [
 		`/serverinfo <target> - Shows various information on the server`,
-		`!serverinfo <target> - Displays the information to everyone. Requires + $ @ * # & ~.`,
+		`!serverinfo <target> - Displays the information to everyone. Requires + % @ * # & ~.`,
 		`Things that can be shown: groups, legends, rules.`,
 	],
 };
