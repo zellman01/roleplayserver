@@ -15,7 +15,7 @@ exports.commands = {
 				`<strong>Globals</strong><br />` +
 				`+ <strong>Voice</strong> - These users are not staff members.<br />` +
 				`<strong>Voices</strong> are exceptional users. The best way to get this is either doing a major contribution to the ` +
-				`server, or being an exceptional roleplayer.<br /><br />`
+				`server, or being an exceptional roleplayer.<br /><br />` +
 				`% <strong>Driver</strong> - These are staff members under a trial, so you can call them in a sense a trial moderator.<br />` +
 				`<strong>Drivers</strong> have some control of the bot, but not much, as well as all of the driver server commands.<br /><br />` +
 				`@ <strong>Moderator</strong> - These are the lowest an actual staff member may be.<br />` +
@@ -45,7 +45,7 @@ exports.commands = {
 			);
 			break;
 		default:
-				return this.errorReply("Error in command execution. Did you type the command correctly?");
+			return this.errorReply("Error in command execution. Did you type the command correctly?");
 		}
 	},
 	serverinfohelp: [
