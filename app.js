@@ -114,6 +114,8 @@ global.Rooms = require('./rooms');
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
 
+global.RPC = {};
+
 global.Tournaments = require('./tournaments');
 
 global.Dnsbl = require('./dnsbl');
@@ -164,6 +166,12 @@ if (require.main === module) {
 
 global.TeamValidatorAsync = require('./team-validator-async');
 TeamValidatorAsync.PM.spawn();
+
+/*********************************************************
+ * Set up the github server
+ *********************************************************/
+
+require('./github');
 
 /*********************************************************
  * Start up the REPL server

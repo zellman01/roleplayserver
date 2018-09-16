@@ -361,6 +361,12 @@ exports.replsocketmode = 0o600;
  */
 exports.disablehotpatchall = false;
 
+exports.github = {
+	secret: "", //The secret you use
+	port: "", //The port for your webhook
+	rooms: [''], //The rooms for the announcements to be put in
+};
+
 /**
  * permissions and groups:
  *   Each entry in `grouplist' is a seperate group. Some of the members are "special"
