@@ -114,6 +114,8 @@ global.Rooms = require('./rooms');
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
 
+global.RPC = {};
+
 global.Tournaments = require('./tournaments');
 
 global.Dnsbl = require('./dnsbl');
