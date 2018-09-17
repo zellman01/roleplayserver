@@ -27,11 +27,11 @@ exports.commands = {
 			);
 			break;
 		case "legends":
-			this.sendReply("This is not finished yet.");
+			this.parse('/legend");
 			break;
-		case "rules":
+		case "rprules":
 			this.sendReplyBox(
-				`<ol>` +
+				`<b><center>Roleplay rules</center></b><ol>` +
 				`<li>Even though this server is dedicated to roleplaying, some rooms (majorly unofficial rooms) will NOT have any roleplaying aspect.` +
 				` If the room does not, it will say somewhere in the room description or roomintro. Please respect that decision.</li>` +
 				`<li>No ERP. Ever. Not even if it's in PMs and you are both adults.</li>` +
@@ -51,7 +51,7 @@ exports.commands = {
 	serverinfohelp: [
 		`/serverinfo <target> - Shows various information on the server`,
 		`!serverinfo <target> - Displays the information to everyone. Requires + % @ * # & ~.`,
-		`Things that can be shown: groups, legends, rules.`,
+		`Things that can be shown: groups, legends, rprules.`,
 	],
 	clearall: 'clearroom',
 	clearroom: function (target, room, user) {
