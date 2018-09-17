@@ -27,7 +27,7 @@ exports.commands = {
 			);
 			break;
 		case "legends":
-			this.parse('/legend");
+			this.parse('/legend');
 			break;
 		case "rprules":
 			this.sendReplyBox(
