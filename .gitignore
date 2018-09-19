@@ -9,6 +9,7 @@
 /chat-plugins/private.js
 /chat-plugins/*-private.js
 /chat-plugins/legends.js
+/chat-plugins/rpcommands.js
 npm-debug.log
 .eslintcache
 package-lock.json
