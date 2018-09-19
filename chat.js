@@ -246,6 +246,7 @@ class CommandContext {
 	 * @param {any} [message]
 	 * @return {any}
 	 */
+	/*eslint-disable */
 	parse(message) {
 		if (message) {
 			// spawn subcontext
@@ -298,13 +299,11 @@ class CommandContext {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
-				/*eslint-disable */
 				if (expValue === 10) {
 					RPC.ExpControl.addExp(this.user, this.room, 1);
 					expValue = 0;
 				}
 				expValue++;
-				/*eslint-enable */
 			}
 		}
 
@@ -312,6 +311,7 @@ class CommandContext {
 
 		return message;
 	}
+	/*eslint-enable */
 
 	/**
 	 * @param {string} message
