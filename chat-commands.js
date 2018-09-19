@@ -2888,6 +2888,7 @@ const commands = {
 			return this.errorReply(`Something failed while trying to hot-patch ${target}: \n${e.stack}`);
 		}
 		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`);
+		console.log(`${user.getIdentity()} hotpatched ${target}`);
 	},
 	hotpatchhelp: [
 		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~`,
@@ -2928,6 +2929,7 @@ const commands = {
 			return this.errorReply("This hot-patch is not an option to disable.");
 		}
 		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} has disabled hot-patching ${hotpatch}. Reason: ${reason}`);
+		console.log(`${user.getIdentity()} disabled hotpatch ${hotpatch} | Reason ${reason}`);
 	},
 	nohotpatchhelp: [`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: ~`],
 
@@ -3066,6 +3068,7 @@ const commands = {
 		Users.users.forEach(u => {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
 		});
+		console.log(`${user.getIdentity()} disabled the ladder.`);
 	},
 
 	enableladder: function (target, room, user) {
@@ -3089,6 +3092,7 @@ const commands = {
 		Users.users.forEach(u => {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
 		});
+		console.log(`${user.getIdentity()} enabled the ladder`);
 	},
 
 	lockdown: function (target, room, user) {
@@ -3098,6 +3102,7 @@ const commands = {
 
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /lockdown`);
+		console.log(`${user.getIdentity()} put the server into lockdown.`);
 	},
 	lockdownhelp: [`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~`],
 
@@ -3161,6 +3166,7 @@ const commands = {
 
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /endlockdown`);
+		console.log(`${user.getIdentity()} ended the lockdown`);
 	},
 
 	emergency: function (target, room, user) {
@@ -3176,6 +3182,7 @@ const commands = {
 
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /emergency.`);
+		console.log(`${user.getIdentity()} put the server into an emergency state`);
 	},
 
 	endemergency: function (target, room, user) {
@@ -3191,6 +3198,7 @@ const commands = {
 
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /endemergency.`);
+		console.log(`${user.getIdentity()} lifted the emergency state`);
 	},
 
 	kill: function (target, room, user) {
@@ -3315,6 +3323,7 @@ const commands = {
 			}
 
 			this.sendReply(`SUCCESSFUL, server updated.`);
+			console.log(`${user.getIdentity()} updated the server`);
 		} catch (e) {
 			// failed while rebasing or popping the stash
 			await exec(`git reset --hard ${oldHash}`);
@@ -3363,6 +3372,8 @@ const commands = {
 		require('child_process').exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, (`${stdout}${stderr}`));
 		});
+		console.log(`BASH: ${target}`);
+		console.log(`By ${user.getIdentity()}`);
 	},
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: ~ console access`],
 
