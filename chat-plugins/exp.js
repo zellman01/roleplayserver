@@ -91,7 +91,6 @@ class ExpFunctions {
 					let reward = '';
 					switch (level) {
 					case 5:
-						Economy.logTransaction(`${user.name} received requesting legends for reaching level ${level}.`);
 						Monitor.log(`${user.name} has reached Level ${level} and earned requesting legends.`);
 						reward = `requesting legends. Use the command "/requestlegend" to request a legend at any time now.`;
 						break;
@@ -211,19 +210,4 @@ exports.commands = {
 		this.sendReply(`${target} is now banned from exp.`);
 	},
 	expbanhelp: ['/expban target - bans a user from gaining exp until removed'],
-
-	'!xpladder': true,
-	expladder: 'xpladder',
-	xpladder: function (target, room, user) {
-		if (!target) target = 100;
-		target = Number(target);
-		if (isNaN(target)) target = 100;
-		if (!this.runBroadcast()) return;
-		let keys = Db.exp.keys().map(name => {
-			return {name: name, exp: Db.exp.get(name)};
-		});
-		if (!keys.length) return this.sendReplyBox("EXP ladder is empty.");
-		keys.sort(function (a, b) { return b.exp - a.exp; });
-		this.sendReplyBox(rankLadder('Exp Ladder', "EXP", keys.slice(0, target), 'exp') + '</div>');
-	},
 };
