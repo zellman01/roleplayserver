@@ -66,7 +66,7 @@ RPC.regdate = function (target, callback) {
 			}
 			if (date !== 0) {
 				regdateCache[target] = date;
-				saveRegdateCache();
+				RPC.saveRegdateCache();
 			}
 			callback((date === 0 ? false : date));
 		});
@@ -75,7 +75,7 @@ RPC.regdate = function (target, callback) {
 };
 
 RPC.reloadCSS = function () {
-	const cssPath = 'ocpu'; // This should be the server id if Config.serverid doesn't exist. Ex: 'serverid'
+	const cssPath = 'rpcenter'; // This should be the server id if Config.serverid doesn't exist. Ex: 'serverid'
 	let options = {
 		host: 'play.pokemonshowdown.com',
 		port: 80,
@@ -93,18 +93,18 @@ RPC.formatName = function (name) {
 	}
 };
 
-function loadRegdateCache() {
+RPC.loadRegdateCache = function () {
 	try {
 		regdateCache = JSON.parse(fs.readFileSync('config/regdate.json', 'utf8'));
 	} catch (e) {}
 }
-loadRegdateCache();
+RPC.loadRegdateCache();
 
-function saveRegdateCache() {
+RPC.saveRegdateCache = function () {
 	fs.writeFileSync('config/regdate.json', JSON.stringify(regdateCache));
 }
 
-function parseStatus(text, encoding) {
+RPC.parseStatus = function (text, encoding) {
 	if (encoding) {
 		text = text
 			.split('')
@@ -119,7 +119,7 @@ function parseStatus(text, encoding) {
 	return text;
 }
 
-function load() {
+RPC.load = function () {
 	fs.readFile('config/customcolors.json', 'utf8', function (err, file) {
 		if (err) return;
 		customColors = JSON.parse(file);
@@ -129,7 +129,7 @@ setInterval(function () {
 	load();
 }, 500);
 
-function updateColor() {
+RPC.updateColor = function () {
 	fs.writeFileSync('config/customcolors.json', JSON.stringify(customColors));
 
 	let newCss = '/* COLORS START */\n';
@@ -145,7 +145,7 @@ function updateColor() {
 	RPC.reloadCSS();
 }
 
-function generateCSS(name, color) {
+RPC.generateCSS = function (name, color) {
 	let css = '';
 	let rooms = [];
 	name = toId(name);
@@ -164,7 +164,7 @@ function generateCSS(name, color) {
 }
 
 /*eslint-disable */
-function MD5(e) {
+RPC.MD5 = function (e) {
 	function t(e, t) {
 		var n, r, i, s, o;
 		i = e & 2147483648;
@@ -296,7 +296,7 @@ RPC.hashColor = function (name) {
 	return colorCache[name];
 };
 
-function hslToRgb(h, s, l) {
+RPC.hslToRgb = function (h, s, l) {
 	let r, g, b, m, c, x;
 	if (!isFinite(h)) h = 0;
 	if (!isFinite(s)) s = 0;
@@ -344,11 +344,11 @@ function hslToRgb(h, s, l) {
 	};
 }
 
-function rgbToHex(R, G, B) {
+RPC.rgbToHex = function (R, G, B) {
 	return toHex(R) + toHex(G) + toHex(B);
 }
 
-function toHex(N) {
+RPC.toHex = function (N) {
 	if (N === null || N === undefined) return "00";
 	N = parseInt(N);
 	if (N === 0 || isNaN(N)) return "00";
