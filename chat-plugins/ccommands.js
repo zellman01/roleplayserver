@@ -4,7 +4,8 @@ exports.commands = {
 	pmus: 'pmupperstaff',
 	pmupperstaff: function (target, room, user) {
 		if (!this.can('lock')) return false;
-		RPC.messageSeniorStaff(target, `~Server`, user.getIdentity());
+		if (!target) return this.parse("/help pmupperstaff");
+		RPC.messageSeniorStaff(target, `~Upper Staff`, user.getIdentity());
 		this.sendReply(`Message sent successfully.`);
 	},
 	pmupperstaffhelp: ["/pmupperstaff <message> - PMs all online upper staff. Requires % @ * & ~"],
@@ -12,7 +13,8 @@ exports.commands = {
 	pms: 'pmstaff',
 	pmstaff: function (target, room, user) {
 		if (!this.can('broadcast')) return false;
-		RPC.pmStaff(target, `~Server`, user.getIdentity());
+		if (!target) return this.parse("/help pmstaff");
+		RPC.pmStaff(target, `~Staff`, user.getIdentity());
 		this.sendReply(`Message sent successfully`);
 	},
 	pmstaffhelp: ["/pmstaff <message> - PMs all online staff. Requires + % @ * & ~"],
