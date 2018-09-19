@@ -1,38 +1,167 @@
 'use strict';
 
-//Credit to SG
-RPC.nameColor = function (name, bold, userGroup) {
-	let userGroupSymbol = Users.usergroups[toId(name)] ? '<strong><font color=#948A88>' + Users.usergroups[toId(name)].substr(0, 1) + '</font></strong>' : "";
-	return (userGroup ? userGroupSymbol : "") + (bold ? "<strong>" : "") + "<font color=" + RPC.hashColor(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Chat.escapeHTML(Users.getExact(name).name) : Chat.escapeHTML(name)) + "</font>" + (bold ? "</strong>" : "");
-};
-// usage: RPC.nameColor(user.name, true) for bold OR RPC.nameColor(user.name, false) for non-bolded.
+// modules and constants
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 
-RPC.messageSeniorStaff = function (message, pmName, from) {
-	pmName = (pmName ? pmName : '~Senior Staff PM [DO NOT REPLY]');
-	from = (from ? ' (PM from ' + from + ')' : '');
+let bubbleLetterMap = new Map([
+	['a', '\u24D0'], ['b', '\u24D1'], ['c', '\u24D2'], ['d', '\u24D3'], ['e', '\u24D4'], ['f', '\u24D5'], ['g', '\u24D6'], ['h', '\u24D7'], ['i', '\u24D8'], ['j', '\u24D9'], ['k', '\u24DA'], ['l', '\u24DB'], ['m', '\u24DC'],
+	['n', '\u24DD'], ['o', '\u24DE'], ['p', '\u24DF'], ['q', '\u24E0'], ['r', '\u24E1'], ['s', '\u24E2'], ['t', '\u24E3'], ['u', '\u24E4'], ['v', '\u24E5'], ['w', '\u24E6'], ['x', '\u24E7'], ['y', '\u24E8'], ['z', '\u24E9'],
+	['A', '\u24B6'], ['B', '\u24B7'], ['C', '\u24B8'], ['D', '\u24B9'], ['E', '\u24BA'], ['F', '\u24BB'], ['G', '\u24BC'], ['H', '\u24BD'], ['I', '\u24BE'], ['J', '\u24BF'], ['K', '\u24C0'], ['L', '\u24C1'], ['M', '\u24C2'],
+	['N', '\u24C3'], ['O', '\u24C4'], ['P', '\u24C5'], ['Q', '\u24C6'], ['R', '\u24C7'], ['S', '\u24C8'], ['T', '\u24C9'], ['U', '\u24CA'], ['V', '\u24CB'], ['W', '\u24CC'], ['X', '\u24CD'], ['Y', '\u24CE'], ['Z', '\u24CF'],
+	['1', '\u2460'], ['2', '\u2461'], ['3', '\u2462'], ['4', '\u2463'], ['5', '\u2464'], ['6', '\u2465'], ['7', '\u2466'], ['8', '\u2467'], ['9', '\u2468'], ['0', '\u24EA'],
+]);
+
+let asciiMap = new Map([
+	['\u24D0', 'a'], ['\u24D1', 'b'], ['\u24D2', 'c'], ['\u24D3', 'd'], ['\u24D4', 'e'], ['\u24D5', 'f'], ['\u24D6', 'g'], ['\u24D7', 'h'], ['\u24D8', 'i'], ['\u24D9', 'j'], ['\u24DA', 'k'], ['\u24DB', 'l'], ['\u24DC', 'm'],
+	['\u24DD', 'n'], ['\u24DE', 'o'], ['\u24DF', 'p'], ['\u24E0', 'q'], ['\u24E1', 'r'], ['\u24E2', 's'], ['\u24E3', 't'], ['\u24E4', 'u'], ['\u24E5', 'v'], ['\u24E6', 'w'], ['\u24E7', 'x'], ['\u24E8', 'y'], ['\u24E9', 'z'],
+	['\u24B6', 'A'], ['\u24B7', 'B'], ['\u24B8', 'C'], ['\u24B9', 'D'], ['\u24BA', 'E'], ['\u24BB', 'F'], ['\u24BC', 'G'], ['\u24BD', 'H'], ['\u24BE', 'I'], ['\u24BF', 'J'], ['\u24C0', 'K'], ['\u24C1', 'L'], ['\u24C2', 'M'],
+	['\u24C3', 'N'], ['\u24C4', 'O'], ['\u24C5', 'P'], ['\u24C6', 'Q'], ['\u24C7', 'R'], ['\u24C8', 'S'], ['\u24C9', 'T'], ['\u24CA', 'U'], ['\u24CB', 'V'], ['\u24CC', 'W'], ['\u24CD', 'X'], ['\u24CE', 'Y'], ['\u24CF', 'Z'],
+	['\u2460', '1'], ['\u2461', '2'], ['\u2462', '3'], ['\u2463', '4'], ['\u2464', '5'], ['\u2465', '6'], ['\u2466', '7'], ['\u2467', '8'], ['\u2468', '9'], ['\u24EA', '0'],
+]);
+
+// misc
+let regdateCache = {};
+let customColors = {};
+
+global.parseStatus = function (text, encoding) {
+	if (encoding) {
+		text = text.split('').map(function (char) {
+			return bubbleLetterMap.get(char);
+		}).join('');
+	} else {
+		text = text.split('').map(function (char) {
+			return asciiMap.get(char);
+		}).join('');
+	}
+	return text;
+};
+
+RPC.pmAll = function (message, pmName) {
+	pmName = (pmName ? pmName : '~Server PM [DO NOT REPLY]');
 	Users.users.forEach(curUser => {
-		if (curUser.group === '~' || curUser.group === '&') {
-			curUser.send('|pm|' + pmName + '|' + curUser.getIdentity() + '|' + message + from);
-		}
+		curUser.send('|pm|' + pmName + '|' + curUser.getIdentity() + '|' + message);
 	});
 };
 
-// format: RPC.messageSeniorStaff('message', 'person')
-//
-// usage: RPC.messageSeniorStaff('Mystifi is a confirmed user and they were banned from a public room. Assess the situation immediately.', '~Server')
-//
-// this makes a PM from ~RPC Server stating the message
-
-
-RPC.pmStaff = function (message, pmName, from) {
-	pmName = (pmName ? pmName : '~Staff PM [DO NOT REPLY]');
-	from = (from ? ' (PM from ' + from + ')' : '');
-	Users.users.forEach(curUser => {
-		if (curUser.isStaff) {
-			curUser.send('|pm|' + pmName + '|' + curUser.getIdentity() + '|' + message + from);
-		}
+RPC.regdate = function (target, callback) {
+	target = toId(target);
+	if (regdateCache[target]) return callback(regdateCache[target]);
+	let req = https.get('https://pokemonshowdown.com/users/' + target + '.json', res => {
+		let data = '';
+		res.on('data', chunk => {
+			data += chunk;
+		}).on('end', () => {
+			try {
+				data = JSON.parse(data);
+			} catch (e) {
+				return callback(false);
+			}
+			let date = data['registertime'];
+			if (date !== 0 && date.toString().length < 13) {
+				while (date.toString().length < 13) {
+					date = Number(date.toString() + '0');
+				}
+			}
+			if (date !== 0) {
+				regdateCache[target] = date;
+				saveRegdateCache();
+			}
+			callback((date === 0 ? false : date));
+		});
 	});
+	req.end();
 };
+
+RPC.reloadCSS = function () {
+	const cssPath = 'ocpu'; // This should be the server id if Config.serverid doesn't exist. Ex: 'serverid'
+	let options = {
+		host: 'play.pokemonshowdown.com',
+		port: 80,
+		path: '/customcss.php?server=' + (Config.serverid || cssPath),
+		method: 'GET',
+	};
+	http.get(options);
+};
+
+RPC.formatName = function (name) {
+	if (Users.getExact(name) && Users(name).connected) {
+		return '<i>' + RPC.nameColor(Users.getExact(name).name, true) + '</i>';
+	} else {
+		return RPC.nameColor(name, false);
+	}
+};
+
+function loadRegdateCache() {
+	try {
+		regdateCache = JSON.parse(fs.readFileSync('config/regdate.json', 'utf8'));
+	} catch (e) {}
+}
+loadRegdateCache();
+
+function saveRegdateCache() {
+	fs.writeFileSync('config/regdate.json', JSON.stringify(regdateCache));
+}
+
+function parseStatus(text, encoding) {
+	if (encoding) {
+		text = text
+			.split('')
+			.map(char => bubbleLetterMap.get(char))
+			.join('');
+	} else {
+		text = text
+			.split('')
+			.map(char => asciiMap.get(char))
+			.join('');
+	}
+	return text;
+}
+
+function load() {
+	fs.readFile('config/customcolors.json', 'utf8', function (err, file) {
+		if (err) return;
+		customColors = JSON.parse(file);
+	});
+}
+setInterval(function () {
+	load();
+}, 500);
+
+function updateColor() {
+	fs.writeFileSync('config/customcolors.json', JSON.stringify(customColors));
+
+	let newCss = '/* COLORS START */\n';
+
+	for (let name in customColors) {
+		newCss += generateCSS(name, customColors[name]);
+	}
+	newCss += '/* COLORS END */\n';
+
+	let file = fs.readFileSync('config/custom.css', 'utf8').split('\n');
+	if (~file.indexOf('/* COLORS START */')) file.splice(file.indexOf('/* COLORS START */'), (file.indexOf('/* COLORS END */') - file.indexOf('/* COLORS START */')) + 1);
+	fs.writeFileSync('config/custom.css', file.join('\n') + newCss);
+	RPC.reloadCSS();
+}
+
+function generateCSS(name, color) {
+	let css = '';
+	let rooms = [];
+	name = toId(name);
+	Rooms.rooms.forEach((curRoom, id) => {
+		if (id === 'global' || curRoom.type !== 'chat' || curRoom.isPersonal) return;
+		if (!isNaN(Number(id.charAt(0)))) return;
+		rooms.push('#' + id + '-userlist-user-' + name + ' strong em');
+		rooms.push('#' + id + '-userlist-user-' + name + ' strong');
+		rooms.push('#' + id + '-userlist-user-' + name + ' span');
+	});
+	css = rooms.join(', ');
+	css += '{\ncolor: ' + color + ' !important;\n}\n';
+	css += '.chat.chatmessage-' + name + ' strong {\n';
+	css += 'color: ' + color + ' !important;\n}\n';
+	return css;
+}
 
 /*eslint-disable */
 function MD5(e) {
@@ -99,7 +228,6 @@ function MD5(e) {
 }
 /*eslint-enable */
 let colorCache = {};
-let CustomColors = {};
 
 // hashColor function
 RPC.hashColor = function (name) {
