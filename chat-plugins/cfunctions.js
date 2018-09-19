@@ -1,7 +1,7 @@
 'use strict';
 
 // modules and constants
-const fs = require('./../lib/fs');
+const fs = require('fs');
 const http = require('http');
 const https = require('https');
 
