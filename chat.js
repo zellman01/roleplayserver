@@ -298,11 +298,13 @@ class CommandContext {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+				/*eslint-disable */
 				if (expValue === 10) {
 					RPC.ExpControl.addExp(this.user, this.room, 1);
 					expValue = 0;
 				}
 				expValue++;
+				/*eslint-enable */
 			}
 		}
 
