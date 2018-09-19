@@ -99,6 +99,7 @@ function MD5(e) {
 }
 /*eslint-enable */
 let colorCache = {};
+let CustomColors = {};
 
 // hashColor function
 RPC.hashColor = function (name) {
