@@ -357,3 +357,37 @@ RPC.toHex = function (N) {
 	N = Math.round(N);
 	return "0123456789ABCDEF".charAt((N - N % 16) / 16) + "0123456789ABCDEF".charAt(N % 16);
 };
+
+//Credit to SG
+RPC.nameColor = function (name, bold, userGroup) {
+	let userGroupSymbol = Users.usergroups[toId(name)] ? '<strong><font color=#948A88>' + Users.usergroups[toId(name)].substr(0, 1) + '</font></strong>' : "";
+	return (userGroup ? userGroupSymbol : "") + (bold ? "<strong>" : "") + "<font color=" + RPC.hashColor(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Chat.escapeHTML(Users.getExact(name).name) : Chat.escapeHTML(name)) + "</font>" + (bold ? "</strong>" : "");
+};
+// usage: RPC.nameColor(user.name, true) for bold OR RPC.nameColor(user.name, false) for non-bolded.
+
+RPC.messageSeniorStaff = function (message, pmName, from) {
+	pmName = (pmName ? pmName : '~Seinor Staff PM [DO NOT REPLY]');
+	from = (from ? ' (PM from ' + from + ')' : '');
+	Users.users.forEach(curUser => {
+		if (curUser.group === '~' || curUser.group === '&') {
+			curUser.send('|pm|' + pmName + '|' + curUser.getIdentity() + '|' + message + from);
+		}
+	});
+};
+
+// format: RPC.messageSeniorStaff('message', 'person')
+//
+// usage: RPC.messageSeniorStaff('Mystifi is a confirmed user and they were banned from a public room. Assess the situation immediately.', '~Server')
+//
+// this makes a PM from ~RPC Server stating the message
+
+
+RPC.pmStaff = function (message, pmName, from) {
+	pmName = (pmName ? pmName : '~Staff PM [DO NOT REPLY]');
+	from = (from ? ' (PM from ' + from + ')' : '');
+	Users.users.forEach(curUser => {
+		if (curUser.isStaff) {
+			curUser.send('|pm|' + pmName + '|' + curUser.getIdentity() + '|' + message + from);
+		}
+	});
+};
