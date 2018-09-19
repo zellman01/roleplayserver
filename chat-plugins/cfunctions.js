@@ -97,12 +97,12 @@ RPC.loadRegdateCache = function () {
 	try {
 		regdateCache = JSON.parse(fs.readFileSync('config/regdate.json', 'utf8'));
 	} catch (e) {}
-}
+};
 RPC.loadRegdateCache();
 
 RPC.saveRegdateCache = function () {
 	fs.writeFileSync('config/regdate.json', JSON.stringify(regdateCache));
-}
+};
 
 RPC.parseStatus = function (text, encoding) {
 	if (encoding) {
@@ -117,16 +117,16 @@ RPC.parseStatus = function (text, encoding) {
 			.join('');
 	}
 	return text;
-}
+};
 
 RPC.load = function () {
 	fs.readFile('config/customcolors.json', 'utf8', function (err, file) {
 		if (err) return;
 		customColors = JSON.parse(file);
 	});
-}
+};
 setInterval(function () {
-	load();
+	RPC.load();
 }, 500);
 
 RPC.updateColor = function () {
@@ -135,7 +135,7 @@ RPC.updateColor = function () {
 	let newCss = '/* COLORS START */\n';
 
 	for (let name in customColors) {
-		newCss += generateCSS(name, customColors[name]);
+		newCss += RPC.generateCSS(name, customColors[name]);
 	}
 	newCss += '/* COLORS END */\n';
 
@@ -143,7 +143,7 @@ RPC.updateColor = function () {
 	if (~file.indexOf('/* COLORS START */')) file.splice(file.indexOf('/* COLORS START */'), (file.indexOf('/* COLORS END */') - file.indexOf('/* COLORS START */')) + 1);
 	fs.writeFileSync('config/custom.css', file.join('\n') + newCss);
 	RPC.reloadCSS();
-}
+};
 
 RPC.generateCSS = function (name, color) {
 	let css = '';
@@ -161,7 +161,7 @@ RPC.generateCSS = function (name, color) {
 	css += '.chat.chatmessage-' + name + ' strong {\n';
 	css += 'color: ' + color + ' !important;\n}\n';
 	return css;
-}
+};
 
 /*eslint-disable */
 RPC.MD5 = function (e) {
@@ -225,7 +225,7 @@ RPC.MD5 = function (e) {
 	v = 271733878;
 	for (e = 0; e < u.length; e += 16) a = h, f = p, l = d, c = v, h = n(h, p, d, v, u[e + 0], 7, 3614090360), v = n(v, h, p, d, u[e + 1], 12, 3905402710), d = n(d, v, h, p, u[e + 2], 17, 606105819), p = n(p, d, v, h, u[e + 3], 22, 3250441966), h = n(h, p, d, v, u[e + 4], 7, 4118548399), v = n(v, h, p, d, u[e + 5], 12, 1200080426), d = n(d, v, h, p, u[e + 6], 17, 2821735955), p = n(p, d, v, h, u[e + 7], 22, 4249261313), h = n(h, p, d, v, u[e + 8], 7, 1770035416), v = n(v, h, p, d, u[e + 9], 12, 2336552879), d = n(d, v, h, p, u[e + 10], 17, 4294925233), p = n(p, d, v, h, u[e + 11], 22, 2304563134), h = n(h, p, d, v, u[e + 12], 7, 1804603682), v = n(v, h, p, d, u[e + 13], 12, 4254626195), d = n(d, v, h, p, u[e + 14], 17, 2792965006), p = n(p, d, v, h, u[e + 15], 22, 1236535329), h = r(h, p, d, v, u[e + 1], 5, 4129170786), v = r(v, h, p, d, u[e + 6], 9, 3225465664), d = r(d, v, h, p, u[e + 11], 14, 643717713), p = r(p, d, v, h, u[e + 0], 20, 3921069994), h = r(h, p, d, v, u[e + 5], 5, 3593408605), v = r(v, h, p, d, u[e + 10], 9, 38016083), d = r(d, v, h, p, u[e + 15], 14, 3634488961), p = r(p, d, v, h, u[e + 4], 20, 3889429448), h = r(h, p, d, v, u[e + 9], 5, 568446438), v = r(v, h, p, d, u[e + 14], 9, 3275163606), d = r(d, v, h, p, u[e + 3], 14, 4107603335), p = r(p, d, v, h, u[e + 8], 20, 1163531501), h = r(h, p, d, v, u[e + 13], 5, 2850285829), v = r(v, h, p, d, u[e + 2], 9, 4243563512), d = r(d, v, h, p, u[e + 7], 14, 1735328473), p = r(p, d, v, h, u[e + 12], 20, 2368359562), h = i(h, p, d, v, u[e + 5], 4, 4294588738), v = i(v, h, p, d, u[e + 8], 11, 2272392833), d = i(d, v, h, p, u[e + 11], 16, 1839030562), p = i(p, d, v, h, u[e + 14], 23, 4259657740), h = i(h, p, d, v, u[e + 1], 4, 2763975236), v = i(v, h, p, d, u[e + 4], 11, 1272893353), d = i(d, v, h, p, u[e + 7], 16, 4139469664), p = i(p, d, v, h, u[e + 10], 23, 3200236656), h = i(h, p, d, v, u[e + 13], 4, 681279174), v = i(v, h, p, d, u[e + 0], 11, 3936430074), d = i(d, v, h, p, u[e + 3], 16, 3572445317), p = i(p, d, v, h, u[e + 6], 23, 76029189), h = i(h, p, d, v, u[e + 9], 4, 3654602809), v = i(v, h, p, d, u[e + 12], 11, 3873151461), d = i(d, v, h, p, u[e + 15], 16, 530742520), p = i(p, d, v, h, u[e + 2], 23, 3299628645), h = s(h, p, d, v, u[e + 0], 6, 4096336452), v = s(v, h, p, d, u[e + 7], 10, 1126891415), d = s(d, v, h, p, u[e + 14], 15, 2878612391), p = s(p, d, v, h, u[e + 5], 21, 4237533241), h = s(h, p, d, v, u[e + 12], 6, 1700485571), v = s(v, h, p, d, u[e + 3], 10, 2399980690), d = s(d, v, h, p, u[e + 10], 15, 4293915773), p = s(p, d, v, h, u[e + 1], 21, 2240044497), h = s(h, p, d, v, u[e + 8], 6, 1873313359), v = s(v, h, p, d, u[e + 15], 10, 4264355552), d = s(d, v, h, p, u[e + 6], 15, 2734768916), p = s(p, d, v, h, u[e + 13], 21, 1309151649), h = s(h, p, d, v, u[e + 4], 6, 4149444226), v = s(v, h, p, d, u[e + 11], 10, 3174756917), d = s(d, v, h, p, u[e + 2], 15, 718787259), p = s(p, d, v, h, u[e + 9], 21, 3951481745), h = t(h, a), p = t(p, f), d = t(d, l), v = t(v, c);
 	return (o(h) + o(p) + o(d) + o(v)).toLowerCase();
-}
+};
 /*eslint-enable */
 let colorCache = {};
 
@@ -234,7 +234,7 @@ RPC.hashColor = function (name) {
 	name = toId(name);
 	if (customColors[name]) return customColors[name];
 	if (colorCache[name]) return colorCache[name];
-	let hash = MD5(name);
+	let hash = RPC.MD5(name);
 	let H = parseInt(hash.substr(4, 4), 16) % 360; // 0 to 360
 	let S = parseInt(hash.substr(0, 4), 16) % 50 + 40; // 40 to 89
 	let L = Math.floor(parseInt(hash.substr(8, 4), 16) % 20 + 30); // 30 to 49
@@ -291,8 +291,8 @@ RPC.hashColor = function (name) {
 	if (HLmod > 15) Smod += (HLmod - 15) / 2;
 	S -= Smod;
 
-	let rgb = hslToRgb(H, S, L);
-	colorCache[name] = "#" + rgbToHex(rgb.r, rgb.g, rgb.b);
+	let rgb = RPC.hslToRgb(H, S, L);
+	colorCache[name] = "#" + RPC.rgbToHex(rgb.r, rgb.g, rgb.b);
 	return colorCache[name];
 };
 
@@ -342,11 +342,11 @@ RPC.hslToRgb = function (h, s, l) {
 		g: g,
 		b: b,
 	};
-}
+};
 
 RPC.rgbToHex = function (R, G, B) {
-	return toHex(R) + toHex(G) + toHex(B);
-}
+	return RPC.toHex(R) + RPC.toHex(G) + RPC.toHex(B);
+};
 
 RPC.toHex = function (N) {
 	if (N === null || N === undefined) return "00";
@@ -356,4 +356,4 @@ RPC.toHex = function (N) {
 	N = Math.min(N, 255);
 	N = Math.round(N);
 	return "0123456789ABCDEF".charAt((N - N % 16) / 16) + "0123456789ABCDEF".charAt(N % 16);
-}
+};
