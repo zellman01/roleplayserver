@@ -95,6 +95,7 @@ class ExpFunctions {
 						Monitor.log(`${user.name} has reached Level ${level} and earned requesting legends.`);
 						reward = `requesting legends. Use the command "/requestlegend" to request a legend at any time now.`;
 						break;
+					}
 					user.sendTo(room, `|html|<center><font size=4><strong><i>Level Up!</i></strong></font><br />You have reached level ${level}, and have earned ${reward}</strong></center>`);
 				}
 			});
