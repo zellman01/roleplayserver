@@ -47,6 +47,7 @@ const BROADCAST_TOKEN = '!';
 const FS = require('./lib/fs');
 
 let Chat = module.exports;
+let expValue = 0;
 
 // Matches U+FE0F and all Emoji_Presentation characters. More details on
 // http://www.unicode.org/Public/emoji/5.0/emoji-data.txt
@@ -245,6 +246,7 @@ class CommandContext {
 	 * @param {any} [message]
 	 * @return {any}
 	 */
+	/*eslint-disable */
 	parse(message) {
 		if (message) {
 			// spawn subcontext
@@ -297,6 +299,11 @@ class CommandContext {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+				if (expValue === 10) {
+					RPC.ExpControl.addExp(this.user, this.room, 1);
+					expValue = 0;
+				}
+				expValue++;
 			}
 		}
 
@@ -304,6 +311,7 @@ class CommandContext {
 
 		return message;
 	}
+	/*eslint-enable */
 
 	/**
 	 * @param {string} message

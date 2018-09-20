@@ -111,6 +111,8 @@ global.Chat = require('./chat');
 
 global.Rooms = require('./rooms');
 
+global.Db = require('nef')(require('nef-fs')('config/db'));
+
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
 
