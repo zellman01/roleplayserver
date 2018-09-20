@@ -20,7 +20,7 @@
     "node": ">=7.7.0"
   },
   "scripts": {
-    "start": "node pokemon-showdown",
+    "start": "title RolePlay Server && node pokemon-showdown",
     "test": "eslint --cache . && tsc && mocha",
     "tsc": "tsc",
     "lint": "eslint --cache .",
