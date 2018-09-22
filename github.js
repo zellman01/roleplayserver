@@ -71,6 +71,9 @@ github.on('pull_request', function pullRequest(repo, ref, result) {
 		action = 'labled';
 		return;
 	}
+	if (requestNumber <= Config.ignorePushFromThis) {
+		return;
+	}
 	let message = "";
 	message += "[<font color='FF00FF'>" + repo + "</font>] ";
 	message += RPC.nameColor(result.sender.login, true) + " ";
