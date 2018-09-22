@@ -368,6 +368,11 @@ exports.github = {
 };
 
 /**
+* ignorePushFromThis - Ignores all pull requests that are this number or lower.
+*/
+exports.ignorePushFromThis = 0;
+
+/**
  * permissions and groups:
  *   Each entry in `grouplist' is a seperate group. Some of the members are "special"
  *     while the rest is just a normal permission.
