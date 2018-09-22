@@ -5,6 +5,7 @@
   "version": "0.11.2",
   "dependencies": {
     "fs": "0.0.1-security",
+    "githubhook": "^1.9.3",
     "http": "0.0.0",
     "https": "^1.0.0",
     "sockjs": "0.3.18"
