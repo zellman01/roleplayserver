@@ -12,6 +12,8 @@
 
 if (!Config.github || !Config.github.port) return;
 
+if (!Config.github.active) return;
+
 let updates = {};
 
 const github = exports.github = require('githubhook')({
