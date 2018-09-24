@@ -6,6 +6,22 @@
 /**@type {(FormatsData | {section: string, column?: number})[]} */
 let Formats = [
 
+	// RP Section
+	///////////////////////////////////////////////////////////////////
+	{
+		section: "RP Formats",
+	},
+	{
+		name: "[Gen 7] Trainer",
+
+		mod: 'gen7',
+		searchShow: false,
+		canUseRandomTeam: false,
+		maxLevel: 100,
+		defaultLevel: 1,
+		rated: false,
+		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
+	},
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////
 	{
