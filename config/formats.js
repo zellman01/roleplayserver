@@ -15,10 +15,6 @@ let Formats = [
 		name: "[Gen 7] Trainer",
 
 		mod: 'gen7',
-		searchShow: false,
-		canUseRandomTeam: false,
-		maxLevel: 100,
-		defaultLevel: 1,
 		rated: false,
 		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
 	},
