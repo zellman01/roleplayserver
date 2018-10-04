@@ -2036,6 +2036,117 @@ const commands = {
 	},
 	unbanallhelp: [`/unbanall - Unban all IP addresses. Requires: & ~`],
 
+	forceglobalblacklist: 'globalblacklist',
+	gblacklist: 'globalblacklist',
+	gbl: 'globalblacklist',
+	globalblacklist: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help globalblacklist');
+
+		target = this.splitTarget(target);
+		let targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+		}
+		if (!target) {
+			return this.errorReply("Global blacklists require a reason.");
+		}
+		if (!this.can('rangeban', targetUser)) return false;
+		let name = targetUser.getLastName();
+		let userid = targetUser.getLastId();
+
+		if (targetUser.trusted) {
+			if (cmd === 'forceglobalblacklist') {
+				let from = targetUser.distrust();
+				Monitor.log(`[CrisisMonitor] ${name} was globally blacklisted by ${user.name} and demoted from ${from.join(", ")}.`);
+				this.globalModlog("CRISISDEMOTE", targetUser, ` from ${from.join(", ")}`);
+			} else {
+				return this.sendReply(`${name} is a trusted user. If you are sure you would like to blacklist them use /forceglobalblacklist.`);
+			}
+		} else if (cmd === 'forceglobalblacklist') {
+			return this.errorReply(`Use /globalblacklist; ${name} is not a trusted user.`);
+		}
+
+		// Destroy personal rooms of the banned user.
+		for (const roomid of targetUser.inRooms) {
+			if (roomid === 'global') continue;
+			let targetRoom = Rooms.get(roomid);
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
+				targetRoom.destroy();
+			}
+		}
+
+		let proof = '';
+		let userReason = target;
+		let targetLowercase = target.toLowerCase();
+		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
+			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
+			let bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
+			userReason = target.substr(0, proofIndex).trim();
+		}
+
+		targetUser.popup(`|modal|${user.name} has globally blacklisted you.${(userReason ? `\n\nReason: ${userReason}` : ``)} ${(Config.appealurl ? `\n\nIf you feel that your blacklist was unjustified, you can appeal:\n${Config.appealurl}` : ``)}\n\nYour blacklist will expire in a year.`);
+
+		let banMessage = `${name} was globally blacklisted by ${user.name}.${(userReason ? ` (${userReason})` : ``)}`;
+		this.addModAction(banMessage);
+
+		// Notify staff room when a user is banned outside of it.
+		if (room.id !== 'staff' && Rooms('staff')) {
+			Rooms('staff').addByUser(user, `<<${room.id}>> ${banMessage}`);
+		}
+
+		let affected = Punishments.blacklistban(targetUser, null, null, userReason);
+		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
+		let displayMessage = '';
+		if (affected.length > 1) {
+			let guests = affected.length - 1;
+			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
+			guests -= affected.length;
+			displayMessage = `(${name}'s ${(acAccount ? `ac account: ${acAccount}, ` : ``)} blacklisted alts: ${affected.join(", ")} ${(guests ? ` [${guests} guests]` : ``)})`;
+			this.privateModAction(displayMessage);
+			for (const user of affected) {
+				this.add(`|unlink|${toId(user)}`);
+			}
+		} else if (acAccount) {
+			displayMessage = `(${name}'s ac account: ${acAccount})`;
+			this.privateModAction(displayMessage);
+		}
+
+		this.add(`|unlink|hide|${userid}`);
+		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
+
+		const globalReason = (target ? `: ${userReason} ${proof}` : '');
+		this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid}${globalReason}`);
+		return true;
+	},
+	globalblacklisthelp: [
+		`/globalblacklist OR /gbl [username], [reason] - Kick user from all rooms and blacklists user's IP address with reason. Requires: & ~`,
+		`/globalblacklist OR /gbl [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
+	],
+
+	globalunblacklist: 'unglobalblacklist',
+	unglobalblacklist: function (target, room, user) {
+		if (!target) return this.parse(`/help unglobalblacklist`);
+		if (!this.can('rangeban')) return false;
+
+		let name = Punishments.blacklistunban(target);
+
+		let unbanMessage = `${name} was globally unblacklisted by ${user.name}.`;
+
+		if (name) {
+			this.addModAction(unbanMessage);
+			// Notify staff room when a user is unbanned outside of it.
+			if (room.id !== 'staff' && Rooms('staff')) {
+				Rooms('staff').addByUser(user, `<<${room.id}>> ${unbanMessage}`);
+			}
+			this.globalModlog("UNBLACKLIST", name, ` by ${user.userid}`);
+		} else {
+			this.errorReply(`User '${target}' is not globally blacklisted.`);
+		}
+	},
+	unglobalblacklisthelp: [`/unglobalblacklist [username] - Unblacklists a user. Requires: & ~`],
+
 	deroomvoiceall: function (target, room, user) {
 		if (!this.can('editroom', null, room)) return false;
 		if (!room.auth) return this.errorReply("Room does not have roomauth.");
