@@ -45,11 +45,11 @@ exports.commands = {
 				`</ol>`
 			);
 			break;
-			case "listrules":
-				this.sendReplyBox(
-					`<button class="button" name="send" value="/serverinfo rprules">RP Rules</button>`
-				);
-				break;
+		case "listrules":
+			this.sendReplyBox(
+				`<button class="button" name="send" value="/serverinfo rprules">RP Rules</button>`
+			);
+			break;
 		default:
 			return this.errorReply("Error in command execution. Did you type the command correctly?");
 		}
