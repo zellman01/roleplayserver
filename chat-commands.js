@@ -2035,7 +2035,7 @@ const commands = {
 		this.modlog('UNBANALL');
 	},
 	unbanallhelp: [`/unbanall - Unban all IP addresses. Requires: & ~`],
-	
+
 	forceglobalblacklist: 'globalblacklist',
 	gblacklist: 'globalblacklist',
 	gbl: 'globalblacklist',
