@@ -45,6 +45,11 @@ exports.commands = {
 				`</ol>`
 			);
 			break;
+			case "listrules":
+				this.sendReplyBox(
+					`<button class="button" name="send" value="/serverinfo rprules">RP Rules</button>`
+				);
+				break;
 		default:
 			return this.errorReply("Error in command execution. Did you type the command correctly?");
 		}
@@ -52,7 +57,7 @@ exports.commands = {
 	serverinfohelp: [
 		`/serverinfo <target> - Shows various information on the server`,
 		`!serverinfo <target> - Displays the information to everyone. Requires + % @ * # & ~.`,
-		`Things that can be shown: groups, legends, rprules.`,
+		`Things that can be shown: groups, legends, rprules, listrules.`,
 	],
 	clearall: 'clearroom',
 	clearroom: function (target, room, user) {
