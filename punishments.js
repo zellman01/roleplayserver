@@ -25,6 +25,7 @@ const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const GLOBALBAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
 const BATTLEBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
+const GLOBALBLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 
 const ROOMBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
@@ -172,6 +173,7 @@ Punishments.punishmentTypes = new Map([
 	['LOCK', 'locked'],
 	['BAN', 'globally banned'],
 	['NAMELOCK', 'namelocked'],
+	['BLACKLISTBAN', 'globally blacklisted'],
 ]);
 
 // For room punishments, they can be anything in the roomPunishmentTypes map.
@@ -435,7 +437,7 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 		}
 
 		// don't override stronger punishment types
-		const types = ['LOCK', 'NAMELOCK', 'BAN'];
+		const types = ['LOCK', 'NAMELOCK', 'BAN', 'BLACKLISTBAN'];
 		if (types.indexOf(existingPunishment[0]) > types.indexOf(punishment[0])) {
 			punishment[0] = existingPunishment[0];
 		}
@@ -1090,6 +1092,34 @@ Punishments.removeSharedIp = function (ip) {
 	Punishments.saveSharedIps();
 };
 
+/**
+ * @param {User} user
+ * @param {number} expireTime
+ * @param {string} id
+ * @param {...string} reason
+ * @return {PunishmentRow}
+ */
+Punishments.blacklistban = function (user, expireTime, id, ...reason) {
+	if (!id) id = user.getLastId();
+
+	if (!expireTime) expireTime = Date.now() + GLOBALBLACKLIST_DURATION;
+	let punishment = ['BLACKLISTBAN', id, expireTime, ...reason];
+
+	let affected = Punishments.punish(user, punishment);
+	for (let curUser of affected) {
+		curUser.locked = id;
+		curUser.disconnectAll();
+	}
+
+	return affected;
+};
+/**
+ * @param {string} name
+ */
+Punishments.blacklistunban = function (name) {
+	return Punishments.unpunish(name, 'BLACKLISTBAN');
+};
+
 /*********************************************************
  * Checking
  *********************************************************/
@@ -1268,6 +1298,13 @@ Punishments.checkName = function (user, userid, registered) {
 		user.disconnectAll();
 		return;
 	}
+	if (registered && id === 'BLACKLISTBAN') {
+		user.popup(`Your username (${user.name}) is blacklisted${bannedUnder}. Your blacklist will expire in around a year.${reason}${appeal}`);
+		user.punishmentNotified = true;
+		Punishments.punish(user, punishment);
+		user.disconnectAll();
+		return;
+	}
 	if (id === 'NAMELOCK' || user.namelocked) {
 		user.popup(`You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
 		if (punishment[2]) Punishments.punish(user, punishment);
@@ -1363,7 +1400,7 @@ Punishments.checkIpBanned = function (connection) {
 	/** @type {false | string} */
 	let banned = false;
 	let punishment = Punishments.ipSearch(ip);
-	if (punishment && punishment[0] === 'BAN') {
+	if (punishment && punishment[0] === 'BAN' || punishment && punishment[0] === 'BLACKLISTBAN') {
 		banned = punishment[1];
 	} else if (Punishments.checkRangeBanned(ip)) {
 		banned = '#ipban';
