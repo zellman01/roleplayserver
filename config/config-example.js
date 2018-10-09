@@ -238,6 +238,13 @@ exports.laddermodchat = false;
 exports.forcetimer = false;
 
 /**
+ * banned words - Words that are specifically banned on the server. No one can overrule this, except for staff + sysops.
+ *  Staff + sysops saying anything in this array will still get warned by the system, and their message sent to the upperstaff room,
+ *  and logged on the console.
+*/
+exports.bannedWords = [''];
+
+/**
  * backdoor - allows Pokemon Showdown system operators to provide technical
  *            support for your server
  *   This backdoor gives system operators (such as Zarel) console admin
