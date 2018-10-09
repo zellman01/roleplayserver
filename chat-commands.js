@@ -453,6 +453,23 @@ const commands = {
 			return this.errorReply(`User ${this.targetUsername} is offline.`);
 		}
 
+		let bannedWords = Config.bannedWords;
+		let w = bannedWords.length;
+		let i = 0;
+		let message = target.replace(/\s|-/g, '').toLowerCase();
+		while (i < w) {
+			if (message.includes(bannedWords[i])) {
+				if (!user.isStaff || !user.hasConsoleAccess(connection)) {
+					Rooms.rooms.get('staff').add(`|c|~Server Alert|**[WARN]** ${this.user.getIdentity()} has tried to send a message that contained a banned word on the server. Message: ${target} Targeted user: ${this.targetUser.getIdentity()}. Offending word: ` + bannedWords[i] + `.`).update();
+					let error = `You have tried to send a banned word through a Private Message. Staff have been notified and will most likely take action.`;
+					error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
+					connection.send(error);
+					return;
+				}
+				Rooms.rooms.get('upperstaff').add(`|c|~Server Alert|__**[ACTION REQUIRED]**__ ${this.user.getIdentity()} has sent a server-weide banned message through a private message. Message: ${target}. Target user: ${this.targetUser.getIdentity()}. Offending word: ` + bannedWords[i] + `.`).update();
+			}
+			i++;
+		}
 		this.parse(target);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
