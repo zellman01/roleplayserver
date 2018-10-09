@@ -304,12 +304,14 @@ class CommandContext {
 					if (messageTest.includes(bannedWords[i])) {
 						if (!this.user.hasConsoleAccess || !this.user.isStaff) {
 							if (this.room.id === 'staff' || this.room.id === 'upperstaff') break;
-							Rooms.rooms.get('staff').add(`|c|~Server Alert|The user ${this.user.getIdentity(this.room.id)} has sent a message which is banned by the server [${message}] in room <<` + this.room + `>> (banned word detected: '` + bannedWords[i] + `').`).update();
+							Rooms('staff').add(`|c|~Server Alert|The user ${this.user.getIdentity(this.room.id)} has sent a message which is banned by the server [${message}] in room <<` + this.room + `>> (banned word detected: '` + bannedWords[i] + `').`).update();
 							return this.errorReply("That message contains a banned word. Staff have been notified. If it was a mis-type, please correct it before sending again.");
 						}
 						if (this.room.id === 'staff' || this.room.id === 'upperstaff') break;
-						Rooms.rooms.get('upperstaff').add(`|c|~Server Alert|The user ${this.user.getIdentity(this.room.id)} has sent a message which is banned by the server [${message}] in room <<` + this.room + `>> (banned word detected: '` + bannedWords[i] + `').`).update();
-						console.log(Date(Date.now()).toString() + ` ${this.user.getIdentity(this.room.id)} | ${message} | ` + bannedWords[i] + `.`);
+						Rooms('upperstaff').add(`|c|~Server Alert|The user ${this.user.getIdentity(this.room.id)} has sent a message which is banned by the server [${message}] in room <<` + this.room + `>> (banned word detected: '` + bannedWords[i] + `').`).update();
+						let a = Date(Date.now());
+						let b = a.toString();
+						console.log(b + ` ${this.user.getIdentity(this.room.id)} | ${message} | ` + bannedWords[i] + `.`);
 						this.errorReply("This has been reported to Upper Staff and the console.");
 					}
 					i++;
