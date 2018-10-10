@@ -242,7 +242,7 @@ exports.forcetimer = false;
  *  Staff + sysops saying anything in this array will still get warned by the system, and their message sent to the upperstaff room,
  *  and logged on the console.
 */
-exports.bannedWords = [''];
+exports.bannedWords = [];
 
 /**
  * backdoor - allows Pokemon Showdown system operators to provide technical
