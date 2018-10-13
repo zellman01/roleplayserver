@@ -461,10 +461,10 @@ const commands = {
 			if (message.includes(bannedWords[i])) {
 				if (!user.isStaff || !user.hasConsoleAccess(connection)) {
 					Rooms.rooms.get('staff').add(`|c|~Server Alert|**[WARN]** ${this.user.getIdentity()} has tried to send a message that contained a banned word on the server. Message: ${target} Targeted user: ${this.targetUser.getIdentity()}. Offending word: ` + bannedWords[i] + `.`).update();
-					let error = `You have tried to send a banned word through a Private Message. Staff have been notified and will most likely take action.`;
+					/*let error = `You have tried to send a banned word through a Private Message. Staff have been notified and will most likely take action.`;
 					error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
 					connection.send(error);
-					return;
+					return;*/
 				}
 				Rooms.rooms.get('upperstaff').add(`|c|~Server Alert|__**[ACTION REQUIRED]**__ ${this.user.getIdentity()} has sent a server-wide banned message through a private message. Message: ${target}. Target user: ${this.targetUser.getIdentity()}. Offending word: ` + bannedWords[i] + `.`).update();
 			}
