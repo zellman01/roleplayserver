@@ -466,7 +466,7 @@ const commands = {
 					connection.send(error);
 					return;
 				}
-				Rooms.rooms.get('upperstaff').add(`|c|~Server Alert|__**[ACTION REQUIRED]**__ ${this.user.getIdentity()} has sent a server-weide banned message through a private message. Message: ${target}. Target user: ${this.targetUser.getIdentity()}. Offending word: ` + bannedWords[i] + `.`).update();
+				Rooms.rooms.get('upperstaff').add(`|c|~Server Alert|__**[ACTION REQUIRED]**__ ${this.user.getIdentity()} has sent a server-wide banned message through a private message. Message: ${target}. Target user: ${this.targetUser.getIdentity()}. Offending word: ` + bannedWords[i] + `.`).update();
 			}
 			i++;
 		}
