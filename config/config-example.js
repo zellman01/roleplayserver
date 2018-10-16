@@ -372,6 +372,7 @@ exports.github = {
 	secret: "", //The secret you use
 	port: "", //The port for your webhook
 	rooms: [''], //The rooms for the announcements to be put in
+	active: false, //Is your github webhook active?
 };
 
 /**
