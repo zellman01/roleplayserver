@@ -50,7 +50,7 @@ exports.commands = {
 				`<b><center>Server rules</center></b><ol>` +
 				`<li>Follow all global Pokémon Showdown rules</li>` +
 				`<li>Be respectiful of everyone.</li>` +
-				`<li>If a staff member tells you to stop doing something, stop.</li>` +
+				`<li>If a staff member requests you to stop of any inappropriate action, please obey. The punishment of ignoring this will be mute or ban/lock if not followed.</li>` +
 				`<li>Do not impersonate staff.</li>` +
 				`<li>Do not ask for auth, unless you are a host of a rp and you need someone to set you as a roomhost.</li>` +
 				`<li>Do not ask to be punished or for someone else to be punished.</li>` +
