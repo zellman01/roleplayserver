@@ -79,6 +79,11 @@ exports.ofe = false;
 exports.potd = '';
 
 /**
+ * Legend list - This is a list for all of the legend/mythicals in the core games.
+ */
+exports.legendList = ['Articuno', 'Zapdos', 'Moltres', 'Suicune', 'Entei', 'Raikou', 'Ho-Oh', 'Lugia', 'Mew', 'Mewtwo', 'Celebi', 'Victini', 'Jirachi', 'Shaymin', 'Meloetta', 'Regice', 'Regirock', 'Registeel', 'Regigigas', 'Latios', 'Latias', 'Kyogre', 'Groudon', 'Rayquaza', 'Deoxys', 'Azelf', 'Mesprit', 'Uxie', 'Dialga', 'Palkia', 'Giratina', 'Cresselia', 'Darkrai', 'Manaphy', 'Phione', 'Heatran', 'Terrakion', 'Cobalion', 'Virizion', 'Keldeo', 'Tornadus', 'Thundurus', 'Landorus', 'Reshiram', 'Zekrom', 'Kyurem', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion', 'Tapu Koko', 'Tapu Lele', 'Tapu Bulu', 'Tapu Fini', 'Solgaleo', 'Lunala', 'Cosmog/Cosmoem', 'Nihilego', 'Buzzwole', 'Pheromosa', 'Xurkitree', 'Kartana', 'Celesteela', 'Guzzlord', 'Magearna', 'Necrozma'];
+
+/**
  * crash guard - write errors to log file instead of crashing
  *   This is normally not recommended - if Node wants to crash, the
  *   server needs to be restarted
