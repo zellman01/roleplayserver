@@ -34,7 +34,6 @@ function list1(legend, check) {
 		return Db.legendDoc.get(legend) !== "N/A";
 	default:
 		throw new Error(`Unexpected check number: list1`);
-		break;
 	}
 }
 
@@ -51,7 +50,6 @@ function list2(legend, check) {
 		return Db.legendDoc2.get(legend) !== "N/A";
 	default:
 		throw new Error(`Unexpected check number: list2`);
-		break;
 	}
 }
 
@@ -68,7 +66,6 @@ function list3(legend, check) {
 		return Db.legendDoc3.get(legend) !== "N/A";
 	default:
 		throw new Error(`Unexpected check number: list3`);
-		break;
 	}
 }
 
