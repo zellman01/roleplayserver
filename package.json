@@ -7,6 +7,8 @@
     "githubhook": "^1.9.3",
     "http": "0.0.0",
     "https": "^1.0.0",
+    "nef": "^1.1.0",
+    "nef-fs": "^1.0.0",
     "sockjs": "0.3.18"
   },
   "optionalDependencies": {
