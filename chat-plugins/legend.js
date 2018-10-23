@@ -227,7 +227,7 @@ exports.commands = {
 			return this.errorReply(`Are you sure you spelled the legend's name correctly?`);
 		}
 
-		writeLegend(legend, user);
+		writeLegend(legend, userN);
 		writeDoc(legend, doc);
 
 		this.parse(`/displaylegend ${legend}`);
