@@ -178,9 +178,9 @@ function display(legend) {
 exports.commands = {
 	legend: function (target, room, user) {
 		target = target.charAt(0).toUpperCase() + target.slice(1);
-		if (list1(target) && list2(target) && list3(target)) {
+		if (list1(target, 1) && list2(target, 1) && list3(target, 1)) {
 			this.errorReply(`That legend is no longer available.`);
-		} else if (list1(target) === `Wrong name`) {
+		} else if (list1(target, 1) === `Wrong name`) {
 			this.errorReply(`Please check your spelling of the legendary name.`);
 		} else {
 			this.sendReply(`The legend ${target} is available!`);
@@ -202,7 +202,7 @@ exports.commands = {
 		if (cmd === "forcereset") {
 			resetLegend();
 			this.sendReply(`All legends have been reset.`);
-			Rooms('lobby').addRaw(`<div class="broadcast-blue">SERVER ANNOUNCEMENT<br/> A server admin has reset all legends. You must request your legend again if you would still like to have the legend perms.`).update();
+			Rooms('lobby').addRaw(`<div class="broadcast-blue"><b>SERVER ANNOUNCEMENT</b><br/> A server admin has reset all legends. You must request your legend again if you would still like to have the legend perms.`).update();
 		} else {
 			return this.errorReply(`Because this is fairly destructive, you must confirm that you want to do this by using "/forcereset".`);
 		}
