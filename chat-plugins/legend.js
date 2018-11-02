@@ -196,6 +196,14 @@ exports.commands = {
 		}
 	},
 
+	listlegends: function (target, room, user) {
+		let display = '';
+		for (let i of Config.legendList) {
+			display += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+		}
+		this.sendReplyBox(display);
+	},
+
 	forcereset: 'reset',
 	reset: function (target, room, user, connection, cmd) {
 		if (!this.can('rawpacket')) return false;
