@@ -198,8 +198,14 @@ exports.commands = {
 
 	listlegends: function (target, room, user) {
 		let display = '';
+		let colum = 0;
 		for (let i of Config.legendList) {
-			display += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+			display += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button> `;
+			colum++;
+			if (colum > 3) {
+				display += "<br />";
+				colum = 0;
+			}
 		}
 		this.sendReplyBox(display);
 	},
