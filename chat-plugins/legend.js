@@ -154,7 +154,7 @@ function check(legend) {
 
 function display(legend) {
 	if (checkLegendName(legend)) {
-		let display = `<center><psicon pokemon="${legend}"/> ${legend} <psicon pokemon="${legend}"/>`
+		let display = `<center><psicon pokemon="${legend}"/> ${legend} <psicon pokemon="${legend}"/>`;
 		if (list1(legend, 1)) {
 			display += `<br />1. ${Db.legend.get(legend)} `;
 			display += `<a>${Db.legendDoc.get(legend)}</a><br />`;
