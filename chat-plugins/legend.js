@@ -196,6 +196,24 @@ exports.commands = {
 		}
 	},
 
+	userlegend: function (target, room, user) {
+		let list = `<center><b>${target}'s legendaries</b><br />`;
+		target = toId(target);
+		for (let i of Config.legendList) {
+			if (Db.legend.get(i) === target) {
+				list += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+			}
+			if (Db.legend2.get(i) === target) {
+				list += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+			}
+			if (Db.legend3.get(i) === target) {
+				list += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+			}
+		}
+		list += `</center>`;
+		this.sendReplyBox(list);
+	},
+
 	listlegends: function (target, room, user) {
 		let display = '';
 		let colum = 0;
