@@ -154,7 +154,7 @@ function check(legend) {
 
 function display(legend) {
 	if (checkLegendName(legend)) {
-		let display = `<center>` + legend;
+		let display = `<center><psicon pokemon="${legend}"/> ${legend} <psicon pokemon="${legend}"/>`;
 		if (list1(legend, 1)) {
 			display += `<br />1. ${Db.legend.get(legend)} `;
 			display += `<a>${Db.legendDoc.get(legend)}</a><br />`;
@@ -194,6 +194,38 @@ exports.commands = {
 		} else {
 			this.sendReplyBox(display(target));
 		}
+	},
+
+	userlegend: function (target, room, user) {
+		let list = `<center><b>${target}'s legendaries</b><br />`;
+		target = toId(target);
+		for (let i of Config.legendList) {
+			if (Db.legend.get(i) === target) {
+				list += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+			}
+			if (Db.legend2.get(i) === target) {
+				list += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+			}
+			if (Db.legend3.get(i) === target) {
+				list += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button><br />`;
+			}
+		}
+		list += `</center>`;
+		this.sendReplyBox(list);
+	},
+
+	listlegends: function (target, room, user) {
+		let display = '';
+		let colum = 0;
+		for (let i of Config.legendList) {
+			display += `<button class="button" name="send" value="/displaylegend ${i}">${i}</button> `;
+			colum++;
+			if (colum > 3) {
+				display += "<br />";
+				colum = 0;
+			}
+		}
+		this.sendReplyBox(display);
 	},
 
 	forcereset: 'reset',
