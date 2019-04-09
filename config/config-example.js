@@ -51,11 +51,36 @@ exports.wsdeflate = {
 }; */
 
 /**
- * TODO: allow SSL to actually be possible to use for third-party servers at
- * some point.
+ * ssl - support WSS, allowing you to access through HTTPS
+ *  The client requires port 443, so if you use a different port here,
+ *  it will need to be forwarded to 443 through iptables rules or
+ *  something.
+ * @type {{port: number, options: {key: string, cert: string}} | null}
+ */
+exports.ssl = null;
+
+/*
+// example:
+const fs = require('fs');
+exports.ssl = {
+	port: 443,
+	options: {
+		key: './config/ssl/privkey.pem',
+		cert: './config/ssl/fullchain.pem',
+	},
+};
+*/
+
+/*
+Main's SSL deploy script from Let's Encrypt looks like:
+	cp /etc/letsencrypt/live/sim.psim.us/privkey.pem ~user/Pokemon-Showdown/config/ssl/
+	cp /etc/letsencrypt/live/sim.psim.us/fullchain.pem ~user/Pokemon-Showdown/config/ssl/
+	chown user:user ~user/Pokemon-Showdown/config/ssl/privkey.pem
+	chown user:user ~user/Pokemon-Showdown/config/ssl/fullchain.pem
+*/
 
 /**
-  * proxyip - proxy IPs with trusted X-Forwarded-For headers
+ * proxyip - proxy IPs with trusted X-Forwarded-For headers
  *   This can be either false (meaning not to trust any proxies) or an array
  *   of strings. Each string should be either an IP address or a subnet given
  *   in CIDR notation. You should usually leave this as `false` unless you
@@ -82,6 +107,7 @@ exports.potd = '';
  * Legend list - This is a list for all of the legend/mythicals in the core games.
  */
 exports.legendList = ['Articuno', 'Zapdos', 'Moltres', 'Mewtwo', 'Mew', 'Raikou', 'Entei', 'Suicune', 'Lugia', 'Ho-Oh', 'Celebi', 'Regirock', 'Regice', 'Registeel', 'Latias', 'Latios', 'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys', 'Uxie', 'Mesprit', 'Azelf', 'Dialga', 'Palkia', 'Heatran', 'Regigigas', 'Giratina', 'Cresselia', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus', 'Victini', 'Cobalion', 'Terrakion', 'Virizion', 'Tornadus', 'Thundurus', 'Reshiram', 'Zekrom', 'Landorus', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion', 'Type: Null', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Tapu Bulu', 'Tapu Fini', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Nihilego', 'Buzzwole', 'Pheromosa', 'Xurkitree', 'Celesteela', 'Kartana', 'Guzzlord', 'Necrozma', 'Magearna', 'Marshadow', 'Stakataka', 'Blacephalon', 'Zeraora'];
+
 
 /**
  * crash guard - write errors to log file instead of crashing
@@ -243,13 +269,6 @@ exports.laddermodchat = false;
 exports.forcetimer = false;
 
 /**
- * banned words - Words that are specifically banned on the server. No one can overrule this, except for staff + sysops.
- *  Staff + sysops saying anything in this array will still get warned by the system, and their message sent to the upperstaff room,
- *  and logged on the console.
-*/
-exports.bannedWords = [];
-
-/**
  * backdoor - allows Pokemon Showdown system operators to provide technical
  *            support for your server
  *   This backdoor gives system operators (such as Zarel) console admin
@@ -373,18 +392,6 @@ exports.replsocketmode = 0o600;
  */
 exports.disablehotpatchall = false;
 
-exports.github = {
-	secret: "", //The secret you use
-	port: "", //The port for your webhook
-	rooms: [''], //The rooms for the announcements to be put in
-	active: false, //Is your github webhook active?
-};
-
-/**
-* ignorePushFromThis - Ignores all pull requests that are this number or lower.
-*/
-exports.ignorePushFromThis = 0;
-
 /**
  * permissions and groups:
  *   Each entry in `grouplist' is a seperate group. Some of the members are "special"
@@ -415,7 +422,8 @@ exports.ignorePushFromThis = 0;
  *                  group and target group are both in jurisdiction.
  *     - room<rank>: /roompromote to <rank> (eg. roomvoice)
  *     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
- *     - editroom: Set modjoin/privacy only for battles/groupchats
+ *     - editroom: Editing properties of rooms
+ *     - editprivacy: Set modjoin/privacy only for battles
  *     - ban: Banning and unbanning.
  *     - mute: Muting and unmuting.
  *     - lock: locking (ipmute) and unlocking.
@@ -467,6 +475,7 @@ exports.grouplist = [
 		globalonly: true,
 		gamemanagement: true,
 		exportinputlog: true,
+		editprivacy: true,
 	},
 	{
 		symbol: '#',
@@ -479,6 +488,7 @@ exports.grouplist = [
 		roomdriver: true,
 		editroom: true,
 		declare: true,
+		addhtml: true,
 		modchatall: true,
 		roomonly: true,
 		gamemanagement: true,
@@ -490,6 +500,7 @@ exports.grouplist = [
 		inherit: '@',
 		jurisdiction: 'u',
 		declare: true,
+		addhtml: true,
 		modchat: true,
 		roomonly: true,
 		gamemanagement: true,
@@ -503,9 +514,9 @@ exports.grouplist = [
 		roomvoice: true,
 		modchat: true,
 		roomonly: true,
-		editroom: true,
 		joinbattle: true,
 		nooverride: true,
+		editprivacy: true,
 	},
 	{
 		symbol: '*',

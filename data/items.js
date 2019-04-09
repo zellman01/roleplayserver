@@ -8,7 +8,7 @@ let BattleItems = {
 		spritenum: 575,
 		megaStone: "Abomasnow-Mega",
 		megaEvolves: "Abomasnow",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -22,7 +22,7 @@ let BattleItems = {
 		spritenum: 576,
 		megaStone: "Absol-Mega",
 		megaEvolves: "Absol",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -37,7 +37,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move.type === 'Water' && target.useItem()) {
 				this.boost({spa: 1});
 			}
@@ -54,7 +54,7 @@ let BattleItems = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && user.baseTemplate.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -70,7 +70,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterBoost: function (boost, target, source, effect) {
+		onAfterBoost(boost, target, source, effect) {
 			if (effect.id === 'intimidate' && target.useItem()) {
 				this.boost({spe: 1});
 			}
@@ -85,7 +85,7 @@ let BattleItems = {
 		spritenum: 577,
 		megaStone: "Aerodactyl-Mega",
 		megaEvolves: "Aerodactyl",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -99,7 +99,7 @@ let BattleItems = {
 		spritenum: 578,
 		megaStone: "Aggron-Mega",
 		megaEvolves: "Aggron",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -116,15 +116,15 @@ let BattleItems = {
 			basePower: 80,
 			type: "Dragon",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
@@ -141,28 +141,28 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onStart: function (target) {
-			if (!target.ignoringItem() && !this.getPseudoWeather('gravity')) {
+		onStart(target) {
+			if (!target.ignoringItem() && !this.field.getPseudoWeather('gravity')) {
 				this.add('-item', target, 'Air Balloon');
 			}
 		},
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
-		onAfterDamage: function (damage, target, source, effect) {
+		onAfterDamage(damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
-				this.itemData = {id: '', target: this};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				target.itemData = {id: '', target};
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
-		onAfterSubDamage: function (damage, target, source, effect) {
+		onAfterSubDamage(damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
-				this.itemData = {id: '', target: this};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				target.itemData = {id: '', target};
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
 		num: 541,
@@ -175,7 +175,7 @@ let BattleItems = {
 		spritenum: 579,
 		megaStone: "Alakazam-Mega",
 		megaEvolves: "Alakazam",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -201,7 +201,7 @@ let BattleItems = {
 		spritenum: 615,
 		megaStone: "Altaria-Mega",
 		megaEvolves: "Altaria",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -215,7 +215,7 @@ let BattleItems = {
 		spritenum: 580,
 		megaStone: "Ampharos-Mega",
 		megaEvolves: "Ampharos",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -232,12 +232,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Ground",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.boost({spd: 1});
 		},
 		num: 205,
@@ -264,12 +264,12 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ice",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.cureStatus();
 			}
@@ -286,10 +286,10 @@ let BattleItems = {
 			basePower: 80,
 		},
 		onModifySpDPriority: 1,
-		onModifySpD: function (spd) {
+		onModifySpD(spd) {
 			return this.chainModify(1.5);
 		},
-		onDisableMove: function (pokemon) {
+		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
 				if (this.getMove(moveSlot.move).category === 'Status') {
 					pokemon.disableMove(moveSlot.id);
@@ -306,7 +306,7 @@ let BattleItems = {
 		spritenum: 617,
 		megaStone: "Audino-Mega",
 		megaEvolves: "Audino",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -323,8 +323,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Steel",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Steel' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Steel' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -332,7 +332,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 199,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Steel-type attack. Single use.",
@@ -343,7 +343,7 @@ let BattleItems = {
 		spritenum: 582,
 		megaStone: "Banette-Mega",
 		megaEvolves: "Banette",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -365,7 +365,7 @@ let BattleItems = {
 		spritenum: 628,
 		megaStone: "Beedrill-Mega",
 		megaEvolves: "Beedrill",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -395,7 +395,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
 					this.heal(20);
@@ -414,10 +414,11 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onTryHealPriority: 1,
-		onTryHeal: function (damage, target, source, effect) {
+		onTryHeal(damage, target, source, effect) {
+			/**@type {{[k: string]: number}} */
 			let heals = {drain: 1, leechseed: 1, ingrain: 1, aquaring: 1, strengthsap: 1};
 			if (heals[effect.id]) {
-				return Math.ceil((damage * 1.3) - 0.5); // Big Root rounds half down
+				return this.chainModify([0x14CC, 0x1000]);
 			}
 		},
 		num: 296,
@@ -444,7 +445,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -462,16 +463,16 @@ let BattleItems = {
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
-		onResidual: function (pokemon) {
-			if (this.isTerrain('grassyterrain')) return;
+		onResidual(pokemon) {
+			if (this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.maxhp / 16);
 			} else {
 				this.damage(pokemon.maxhp / 8);
 			}
 		},
-		onTerrain: function (pokemon) {
-			if (!this.isTerrain('grassyterrain')) return;
+		onTerrain(pokemon) {
+			if (!this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.maxhp / 16);
 			} else {
@@ -490,7 +491,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -505,7 +506,7 @@ let BattleItems = {
 		spritenum: 583,
 		megaStone: "Blastoise-Mega",
 		megaEvolves: "Blastoise",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -519,7 +520,7 @@ let BattleItems = {
 		spritenum: 584,
 		megaStone: "Blaziken-Mega",
 		megaEvolves: "Blaziken",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -531,15 +532,15 @@ let BattleItems = {
 		id: "blueorb",
 		name: "Blue Orb",
 		spritenum: 41,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Kyogre') {
 				this.insertQueue({pokemon: pokemon, choice: 'runPrimal'});
 			}
 		},
-		onPrimal: function (pokemon) {
+		onPrimal(pokemon) {
 			pokemon.formeChange('Kyogre-Primal', this.effect, true);
 		},
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
 			return true;
 		},
@@ -561,6 +562,17 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
+	"bottlecap": {
+		id: "bottlecap",
+		name: "Bottle Cap",
+		spritenum: 696,
+		fling: {
+			basePower: 30,
+		},
+		num: 795,
+		gen: 7,
+		desc: "Used for Hyper Training. One of a Pokemon's stats is calculated with an IV of 31.",
+	},
 	"brightpowder": {
 		id: "brightpowder",
 		name: "Bright Powder",
@@ -568,7 +580,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyAccuracy: function (accuracy) {
+		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
 			return accuracy * 0.9;
@@ -583,7 +595,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 53,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Bug') {
 				if (source.useItem()) {
@@ -601,7 +613,7 @@ let BattleItems = {
 		name: "Bug Memory",
 		spritenum: 673,
 		onMemory: 'Bug',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -629,7 +641,7 @@ let BattleItems = {
 		id: "burndrive",
 		name: "Burn Drive",
 		spritenum: 54,
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
 			}
@@ -647,7 +659,7 @@ let BattleItems = {
 		spritenum: 625,
 		megaStone: "Camerupt-Mega",
 		megaEvolves: "Camerupt",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -662,7 +674,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move.type === 'Electric' && target.useItem()) {
 				this.boost({atk: 1});
 			}
@@ -679,7 +691,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -694,7 +706,7 @@ let BattleItems = {
 		spritenum: 585,
 		megaStone: "Charizard-Mega-X",
 		megaEvolves: "Charizard",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -708,7 +720,7 @@ let BattleItems = {
 		spritenum: 586,
 		megaStone: "Charizard-Mega-Y",
 		megaEvolves: "Charizard",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -725,8 +737,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Rock",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Rock' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Rock' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -734,7 +746,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 195,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Rock-type attack. Single use.",
@@ -748,12 +760,12 @@ let BattleItems = {
 			basePower: 80,
 			type: "Fire",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.cureStatus();
 			}
@@ -779,12 +791,12 @@ let BattleItems = {
 			basePower: 80,
 			type: "Water",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'slp') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'slp') {
 				pokemon.cureStatus();
 			}
@@ -802,7 +814,7 @@ let BattleItems = {
 			basePower: 80,
 			type: "Normal",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
+		onSourceModifyDamage(damage, source, target, move) {
 			if (move.type === 'Normal' && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
@@ -811,7 +823,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 200,
 		gen: 4,
 		desc: "Halves damage taken from a Normal-type attack. Single use.",
@@ -820,7 +832,7 @@ let BattleItems = {
 		id: "chilldrive",
 		name: "Chill Drive",
 		spritenum: 67,
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
 			}
@@ -839,17 +851,17 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			if (pokemon.volatiles['choicelock']) {
 				this.debug('removing choicelock: ' + pokemon.volatiles.choicelock);
 			}
 			pokemon.removeVolatile('choicelock');
 		},
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 		onModifyAtkPriority: 1,
-		onModifyAtk: function (atk) {
+		onModifyAtk(atk) {
 			return this.chainModify(1.5);
 		},
 		isChoice: true,
@@ -864,16 +876,16 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			if (pokemon.volatiles['choicelock']) {
 				this.debug('removing choicelock: ' + pokemon.volatiles.choicelock);
 			}
 			pokemon.removeVolatile('choicelock');
 		},
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(1.5);
 		},
 		isChoice: true,
@@ -888,17 +900,17 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			if (pokemon.volatiles['choicelock']) {
 				this.debug('removing choicelock: ' + pokemon.volatiles.choicelock);
 			}
 			pokemon.removeVolatile('choicelock');
 		},
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 		onModifySpAPriority: 1,
-		onModifySpA: function (spa) {
+		onModifySpA(spa) {
 			return this.chainModify(1.5);
 		},
 		isChoice: true,
@@ -915,8 +927,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Fighting",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Fighting' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -924,7 +936,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 189,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Fighting-type attack. Single use.",
@@ -949,8 +961,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Flying",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Flying' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Flying' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -958,7 +970,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 192,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Flying-type attack. Single use.",
@@ -972,8 +984,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Dark",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Dark' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Dark' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -981,7 +993,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 198,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Dark-type attack. Single use.",
@@ -1015,7 +1027,6 @@ let BattleItems = {
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
-		isUnreleased: true,
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {
@@ -1023,7 +1034,7 @@ let BattleItems = {
 			type: "Ghost",
 		},
 		onModifyPriorityPriority: -1,
-		onModifyPriority: function (priority, pokemon) {
+		onModifyPriority(priority, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
@@ -1032,7 +1043,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 210,
 		gen: 4,
 		desc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
@@ -1054,7 +1065,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 89,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Dark') {
 				if (source.useItem()) {
@@ -1072,7 +1083,7 @@ let BattleItems = {
 		name: "Dark Memory",
 		spritenum: 683,
 		onMemory: 'Dark',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -1128,7 +1139,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onModifySpDPriority: 2,
-		onModifySpD: function (spd, pokemon) {
+		onModifySpD(spd, pokemon) {
 			if (pokemon.baseTemplate.species === 'Clamperl') {
 				return this.chainModify(2);
 			}
@@ -1146,7 +1157,7 @@ let BattleItems = {
 			basePower: 90,
 		},
 		onModifySpAPriority: 1,
-		onModifySpA: function (spa, pokemon) {
+		onModifySpA(spa, pokemon) {
 			if (pokemon.baseTemplate.species === 'Clamperl') {
 				return this.chainModify(2);
 			}
@@ -1164,7 +1175,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onAttractPriority: -100,
-		onAttract: function (target, source) {
+		onAttract(target, source) {
 			this.debug('attract intercepted: ' + target + ' from ' + source);
 			if (!source || source === target) return;
 			if (!source.volatiles.attract) source.addVolatile('attract', target);
@@ -1179,7 +1190,7 @@ let BattleItems = {
 		spritenum: 624,
 		megaStone: "Diancie-Mega",
 		megaEvolves: "Diancie",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -1210,7 +1221,7 @@ let BattleItems = {
 		id: "dousedrive",
 		name: "Douse Drive",
 		spritenum: 103,
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
 			}
@@ -1228,12 +1239,12 @@ let BattleItems = {
 		spritenum: 105,
 		onPlate: 'Dragon',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -1252,7 +1263,7 @@ let BattleItems = {
 			basePower: 70,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -1267,7 +1278,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 107,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Dragon') {
 				if (source.useItem()) {
@@ -1285,7 +1296,7 @@ let BattleItems = {
 		name: "Dragon Memory",
 		spritenum: 682,
 		onMemory: 'Dragon',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -1326,12 +1337,12 @@ let BattleItems = {
 		spritenum: 110,
 		onPlate: 'Dark',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -1402,12 +1413,12 @@ let BattleItems = {
 		spritenum: 117,
 		onPlate: 'Ground',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Ground') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -1438,7 +1449,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAfterMoveSecondaryPriority: 2,
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status') {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
 				if (target.useItem()) {
@@ -1468,7 +1479,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 120,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
 			if (move.type === 'Electric') {
 				if (source.useItem()) {
@@ -1486,7 +1497,7 @@ let BattleItems = {
 		name: "Electric Memory",
 		spritenum: 679,
 		onMemory: 'Electric',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -1504,9 +1515,14 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate: function (pokemon) {
-			if (this.isTerrain('electricterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain') && pokemon.useItem()) {
 				this.boost({def: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.field.isTerrain('electricterrain') && this.effectData.target.useItem()) {
+				this.boost({def: 1}, this.effectData.target);
 			}
 		},
 		num: 881,
@@ -1540,24 +1556,23 @@ let BattleItems = {
 	"enigmaberry": {
 		id: "enigmaberry",
 		name: "Enigma Berry",
-		isUnreleased: true,
 		spritenum: 124,
 		isBerry: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Bug",
 		},
-		onHit: function (target, source, move) {
-			if (move && move.typeMod > 0) {
+		onHit(target, source, move) {
+			if (move && target.getMoveHitData(move).typeMod > 0) {
 				if (target.eatItem()) {
 					this.heal(target.maxhp / 4);
 				}
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 208,
 		gen: 3,
 		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
@@ -1570,13 +1585,13 @@ let BattleItems = {
 			basePower: 40,
 		},
 		onModifyDefPriority: 2,
-		onModifyDef: function (def, pokemon) {
+		onModifyDef(def, pokemon) {
 			if (pokemon.baseTemplate.nfe) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
-		onModifySpD: function (spd, pokemon) {
+		onModifySpD(spd, pokemon) {
 			if (pokemon.baseTemplate.nfe) {
 				return this.chainModify(1.5);
 			}
@@ -1592,8 +1607,8 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyDamage: function (damage, source, target, move) {
-			if (move && move.typeMod > 0) {
+		onModifyDamage(damage, source, target, move) {
+			if (move && target.getMoveHitData(move).typeMod > 0) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -1620,7 +1635,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 611,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fairy') {
 				if (source.useItem()) {
@@ -1638,7 +1653,7 @@ let BattleItems = {
 		name: "Fairy Memory",
 		spritenum: 684,
 		onMemory: 'Fairy',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -1663,7 +1678,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 139,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fighting') {
 				if (source.useItem()) {
@@ -1681,7 +1696,7 @@ let BattleItems = {
 		name: "Fighting Memory",
 		spritenum: 668,
 		onMemory: 'Fighting',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -1714,15 +1729,15 @@ let BattleItems = {
 			basePower: 80,
 			type: "Bug",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
@@ -1738,7 +1753,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 141,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
 			if (move.type === 'Fire') {
 				if (source.useItem()) {
@@ -1756,7 +1771,7 @@ let BattleItems = {
 		name: "Fire Memory",
 		spritenum: 676,
 		onMemory: 'Fire',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -1798,12 +1813,12 @@ let BattleItems = {
 		spritenum: 143,
 		onPlate: 'Fighting',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -1824,7 +1839,7 @@ let BattleItems = {
 		},
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			pokemon.trySetStatus('brn', pokemon);
 		},
 		num: 273,
@@ -1837,12 +1852,12 @@ let BattleItems = {
 		spritenum: 146,
 		onPlate: 'Fire',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -1860,7 +1875,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyWeight: function (weight) {
+		onModifyWeight(weight) {
 			return weight / 2;
 		},
 		num: 539,
@@ -1873,7 +1888,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 149,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Flying') {
 				if (source.useItem()) {
@@ -1891,7 +1906,7 @@ let BattleItems = {
 		name: "Flying Memory",
 		spritenum: 669,
 		onMemory: 'Flying',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -1922,7 +1937,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
 				return target.hp - 1;
@@ -1939,7 +1954,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
 				if (target.useItem()) {
 					return target.hp - 1;
@@ -1965,7 +1980,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyPriority: function (priority, pokemon) {
+		onModifyPriority(priority, pokemon) {
 			return Math.round(priority) - 0.1;
 		},
 		num: 316,
@@ -1978,7 +1993,7 @@ let BattleItems = {
 		spritenum: 616,
 		megaStone: "Gallade-Mega",
 		megaEvolves: "Gallade",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -1995,12 +2010,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Ice",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.boost({def: 1});
 		},
 		num: 202,
@@ -2013,7 +2028,7 @@ let BattleItems = {
 		spritenum: 589,
 		megaStone: "Garchomp-Mega",
 		megaEvolves: "Garchomp",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2027,7 +2042,7 @@ let BattleItems = {
 		spritenum: 587,
 		megaStone: "Gardevoir-Mega",
 		megaEvolves: "Gardevoir",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2041,7 +2056,7 @@ let BattleItems = {
 		spritenum: 588,
 		megaStone: "Gengar-Mega",
 		megaEvolves: "Gengar",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2055,7 +2070,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 161,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ghost') {
 				if (source.useItem()) {
@@ -2073,7 +2088,7 @@ let BattleItems = {
 		name: "Ghost Memory",
 		spritenum: 674,
 		onMemory: 'Ghost',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -2103,7 +2118,7 @@ let BattleItems = {
 		spritenum: 623,
 		megaStone: "Glalie-Mega",
 		megaEvolves: "Glalie",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2111,13 +2126,24 @@ let BattleItems = {
 		gen: 6,
 		desc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
 	},
+	"goldbottlecap": {
+		id: "goldbottlecap",
+		name: "Gold Bottle Cap",
+		spritenum: 697,
+		fling: {
+			basePower: 30,
+		},
+		num: 796,
+		gen: 7,
+		desc: "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
+	},
 	"grassgem": {
 		id: "grassgem",
 		name: "Grass Gem",
 		isUnreleased: true,
 		spritenum: 172,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
 			if (move.type === 'Grass') {
 				if (source.useItem()) {
@@ -2135,7 +2161,7 @@ let BattleItems = {
 		name: "Grass Memory",
 		spritenum: 678,
 		onMemory: 'Grass',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -2166,9 +2192,14 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate: function (pokemon) {
-			if (this.isTerrain('grassyterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain') && pokemon.useItem()) {
 				this.boost({def: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.field.isTerrain('grassyterrain') && this.effectData.target.useItem()) {
+				this.boost({def: 1}, this.effectData.target);
 			}
 		},
 		num: 884,
@@ -2217,12 +2248,12 @@ let BattleItems = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (user.baseTemplate.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 487) || pokemon.baseTemplate.num === 487) {
 				return false;
 			}
@@ -2239,7 +2270,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 182,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ground') {
 				if (source.useItem()) {
@@ -2257,7 +2288,7 @@ let BattleItems = {
 		name: "Ground Memory",
 		spritenum: 671,
 		onMemory: 'Ground',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -2287,7 +2318,7 @@ let BattleItems = {
 		spritenum: 589,
 		megaStone: "Gyarados-Mega",
 		megaEvolves: "Gyarados",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2304,8 +2335,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Dragon",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Dragon' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Dragon' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -2313,7 +2344,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 197,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Dragon-type attack. Single use.",
@@ -2326,7 +2357,7 @@ let BattleItems = {
 			basePower: 100,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Rock') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -2379,7 +2410,7 @@ let BattleItems = {
 		spritenum: 590,
 		megaStone: "Heracross-Mega",
 		megaEvolves: "Heracross",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2407,7 +2438,7 @@ let BattleItems = {
 		spritenum: 591,
 		megaStone: "Houndoom-Mega",
 		megaEvolves: "Houndoom",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2424,15 +2455,15 @@ let BattleItems = {
 			basePower: 80,
 			type: "Dark",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
@@ -2448,7 +2479,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 218,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ice') {
 				if (source.useItem()) {
@@ -2466,7 +2497,7 @@ let BattleItems = {
 		name: "Ice Memory",
 		spritenum: 681,
 		onMemory: 'Ice',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -2495,12 +2526,12 @@ let BattleItems = {
 		spritenum: 220,
 		onPlate: 'Ice',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -2553,12 +2584,12 @@ let BattleItems = {
 		spritenum: 223,
 		onPlate: 'Bug',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -2576,12 +2607,13 @@ let BattleItems = {
 		fling: {
 			basePower: 130,
 		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target) return;
+			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
 			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
 		},
 		// airborneness negation implemented in sim/pokemon.js:Pokemon#isGrounded
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 278,
@@ -2594,12 +2626,12 @@ let BattleItems = {
 		spritenum: 225,
 		onPlate: 'Steel',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -2613,21 +2645,20 @@ let BattleItems = {
 	"jabocaberry": {
 		id: "jabocaberry",
 		name: "Jaboca Berry",
-		isUnreleased: true,
 		spritenum: 230,
 		isBerry: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Dragon",
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (source && source.hp && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target);
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 211,
 		gen: 4,
 		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use.",
@@ -2652,8 +2683,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ghost",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Ghost' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Ghost' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -2661,7 +2692,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 196,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Ghost-type attack. Single use.",
@@ -2675,8 +2706,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Poison",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Poison' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Poison' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -2684,7 +2715,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 190,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Poison-type attack. Single use.",
@@ -2698,12 +2729,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Fairy",
 		},
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (move.category === 'Physical') {
 				target.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.boost({def: 1});
 		},
 		num: 687,
@@ -2730,7 +2761,7 @@ let BattleItems = {
 		spritenum: 592,
 		megaStone: "Kangaskhan-Mega",
 		megaEvolves: "Kangaskhan",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2747,7 +2778,7 @@ let BattleItems = {
 			volatileStatus: 'flinch',
 		},
 		onModifyMovePriority: -1,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
 				for (const secondary of move.secondaries) {
@@ -2783,7 +2814,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyPriority: function (priority, pokemon) {
+		onModifyPriority(priority, pokemon) {
 			return Math.round(priority) - 0.1;
 		},
 		num: 279,
@@ -2799,12 +2830,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Flying",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			pokemon.addVolatile('focusenergy');
 		},
 		num: 206,
@@ -2817,7 +2848,7 @@ let BattleItems = {
 		spritenum: 629,
 		megaStone: "Latias-Mega",
 		megaEvolves: "Latias",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2831,7 +2862,7 @@ let BattleItems = {
 		spritenum: 630,
 		megaStone: "Latios-Mega",
 		megaEvolves: "Latios",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -2846,7 +2877,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyAccuracy: function (accuracy) {
+		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.9;
@@ -2876,12 +2907,12 @@ let BattleItems = {
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
-		onResidual: function (pokemon) {
-			if (this.isTerrain('grassyterrain')) return;
+		onResidual(pokemon) {
+			if (this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.maxhp / 16);
 		},
-		onTerrain: function (pokemon) {
-			if (!this.isTerrain('grassyterrain')) return;
+		onTerrain(pokemon) {
+			if (!this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.maxhp / 16);
 		},
 		num: 234,
@@ -2897,44 +2928,23 @@ let BattleItems = {
 			basePower: 80,
 			type: "Fighting",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (!pokemon.hp) return;
-			let moveSlot = pokemon.lastMove && pokemon.getMoveData(pokemon.lastMove.id);
-			if (moveSlot && moveSlot.pp === 0) {
-				pokemon.addVolatile('leppaberry');
-				pokemon.volatiles['leppaberry'].moveSlot = moveSlot;
+			if (pokemon.moveSlots.some(move => move.pp === 0)) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
-			let moveSlot;
-			if (pokemon.volatiles['leppaberry']) {
-				moveSlot = pokemon.volatiles['leppaberry'].moveSlot;
-				pokemon.removeVolatile('leppaberry');
-			} else {
-				let pp = 99;
-				for (const possibleMoveSlot of pokemon.moveSlots) {
-					if (possibleMoveSlot.pp < pp) {
-						moveSlot = possibleMoveSlot;
-						pp = moveSlot.pp;
-					}
-				}
-			}
+		onEat(pokemon) {
+			let moveSlot = pokemon.moveSlots.find(move => move.pp === 0) ||
+				pokemon.moveSlots.find(move => move.pp < move.maxpp);
+			if (!moveSlot) return;
 			moveSlot.pp += 10;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]');
 			if (pokemon.item !== 'leppaberry') {
-				let foeIsStale = false;
-				for (const foeActive of pokemon.side.foe.active) {
-					if (foeActive.hp && foeActive.isStale >= 2) {
-						foeIsStale = true;
-						break;
-					}
-				}
-				if (!foeIsStale) return;
+				pokemon.isStale = 2;
+				pokemon.isStaleSource = 'useleppa';
 			}
-			pokemon.isStale = 2;
-			pokemon.isStaleSource = 'useleppa';
 		},
 		num: 154,
 		gen: 3,
@@ -2957,12 +2967,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Grass",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.boost({atk: 1});
 		},
 		num: 201,
@@ -2976,10 +2986,10 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyDamage: function (damage, source, target, move) {
+		onModifyDamage(damage, source, target, move) {
 			return this.chainModify([0x14CC, 0x1000]);
 		},
-		onAfterMoveSecondarySelf: function (source, target, move) {
+		onAfterMoveSecondarySelf(source, target, move) {
 			if (source && source !== target && move && move.category !== 'Status') {
 				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
@@ -2997,13 +3007,13 @@ let BattleItems = {
 			status: 'par',
 		},
 		onModifyAtkPriority: 1,
-		onModifyAtk: function (atk, pokemon) {
+		onModifyAtk(atk, pokemon) {
 			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpAPriority: 1,
-		onModifySpA: function (spa, pokemon) {
+		onModifySpA(spa, pokemon) {
 			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
 				return this.chainModify(2);
 			}
@@ -3030,7 +3040,7 @@ let BattleItems = {
 		spritenum: 626,
 		megaStone: "Lopunny-Mega",
 		megaEvolves: "Lopunny",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3052,7 +3062,7 @@ let BattleItems = {
 		spritenum: 594,
 		megaStone: "Lucario-Mega",
 		megaEvolves: "Lucario",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3067,7 +3077,7 @@ let BattleItems = {
 		fling: {
 			basePower: 40,
 		},
-		onModifyCritRatio: function (critRatio, user) {
+		onModifyCritRatio(critRatio, user) {
 			if (user.baseTemplate.species === 'Chansey') {
 				return critRatio + 2;
 			}
@@ -3085,12 +3095,12 @@ let BattleItems = {
 			basePower: 80,
 			type: "Flying",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status || pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			pokemon.cureStatus();
 			pokemon.removeVolatile('confusion');
 		},
@@ -3105,7 +3115,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move.type === 'Water' && target.useItem()) {
 				this.boost({spd: 1});
 			}
@@ -3142,7 +3152,7 @@ let BattleItems = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && user.baseTemplate.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -3180,7 +3190,7 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 215,
@@ -3206,7 +3216,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -3224,15 +3234,15 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ghost",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
@@ -3261,7 +3271,7 @@ let BattleItems = {
 		id: "mail",
 		name: "Mail",
 		spritenum: 403,
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (!this.activeMove) return false;
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
@@ -3276,7 +3286,7 @@ let BattleItems = {
 		spritenum: 596,
 		megaStone: "Manectric-Mega",
 		megaEvolves: "Manectric",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3293,12 +3303,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Dark",
 		},
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (move.category === 'Special') {
 				target.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.boost({spd: 1});
 		},
 		num: 688,
@@ -3331,7 +3341,7 @@ let BattleItems = {
 		spritenum: 598,
 		megaStone: "Mawile-Mega",
 		megaEvolves: "Mawile",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3345,12 +3355,12 @@ let BattleItems = {
 		spritenum: 282,
 		onPlate: 'Grass',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -3367,7 +3377,7 @@ let BattleItems = {
 		spritenum: 599,
 		megaStone: "Medicham-Mega",
 		megaEvolves: "Medicham",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3381,7 +3391,7 @@ let BattleItems = {
 		spritenum: 285,
 		fling: {
 			basePower: 10,
-			effect: function (pokemon) {
+			effect(pokemon) {
 				let conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
 				for (const firstCondition of conditions) {
 					if (pokemon.volatiles[firstCondition]) {
@@ -3396,7 +3406,7 @@ let BattleItems = {
 				}
 			},
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			let conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
 			for (const firstCondition of conditions) {
 				if (pokemon.volatiles[firstCondition]) {
@@ -3421,7 +3431,7 @@ let BattleItems = {
 		spritenum: 618,
 		megaStone: "Metagross-Mega",
 		megaEvolves: "Metagross",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3437,7 +3447,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -3455,7 +3465,7 @@ let BattleItems = {
 		},
 		spritenum: 287,
 		onModifyDefPriority: 2,
-		onModifyDef: function (def, pokemon) {
+		onModifyDef(def, pokemon) {
 			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
@@ -3471,16 +3481,16 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			pokemon.addVolatile('metronome');
 		},
 		effect: {
-			onStart: function (pokemon) {
+			onStart(pokemon) {
 				this.effectData.numConsecutive = 0;
 				this.effectData.lastMove = '';
 			},
 			onTryMovePriority: -2,
-			onTryMove: function (pokemon, target, move) {
+			onTryMove(pokemon, target, move) {
 				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
 					return;
@@ -3492,7 +3502,7 @@ let BattleItems = {
 				}
 				this.effectData.lastMove = move.id;
 			},
-			onModifyDamage: function (damage, source, target, move) {
+			onModifyDamage(damage, source, target, move) {
 				let numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
 				let dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
 				return this.chainModify([dmgMod[numConsecutive], 0x1000]);
@@ -3520,7 +3530,7 @@ let BattleItems = {
 		spritenum: 600,
 		megaStone: "Mewtwo-Mega-X",
 		megaEvolves: "Mewtwo",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3534,7 +3544,7 @@ let BattleItems = {
 		spritenum: 601,
 		megaStone: "Mewtwo-Mega-Y",
 		megaEvolves: "Mewtwo",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -3545,24 +3555,23 @@ let BattleItems = {
 	"micleberry": {
 		id: "micleberry",
 		name: "Micle Berry",
-		isUnreleased: true,
 		spritenum: 290,
 		isBerry: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Rock",
 		},
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			pokemon.addVolatile('micleberry');
 		},
 		effect: {
 			duration: 2,
-			onSourceModifyAccuracy: function (accuracy, target, source) {
+			onSourceModifyAccuracy(accuracy, target, source) {
 				this.add('-enditem', source, 'Micle Berry');
 				source.removeVolatile('micleberry');
 				if (typeof accuracy === 'number') {
@@ -3592,12 +3601,12 @@ let BattleItems = {
 		spritenum: 291,
 		onPlate: 'Psychic',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -3616,7 +3625,7 @@ let BattleItems = {
 		},
 		spritenum: 292,
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -3632,9 +3641,14 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate: function (pokemon) {
-			if (this.isTerrain('mistyterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain') && pokemon.useItem()) {
 				this.boost({spd: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.field.isTerrain('mistyterrain') && this.effectData.target.useItem()) {
+				this.boost({spd: 1}, this.effectData.target);
 			}
 		},
 		num: 883,
@@ -3669,7 +3683,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.category === 'Physical') {
 				return this.chainModify([0x1199, 0x1000]);
 			}
@@ -3686,7 +3700,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -3734,7 +3748,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -3763,7 +3777,7 @@ let BattleItems = {
 		name: "Normal Gem",
 		spritenum: 307,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
 			if (move.type === 'Normal') {
 				if (source.useItem()) {
@@ -3796,8 +3810,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Fire",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Fire' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fire' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -3805,7 +3819,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 184,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Fire-type attack. Single use.",
@@ -3818,7 +3832,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -3847,15 +3861,15 @@ let BattleItems = {
 			basePower: 80,
 			type: "Poison",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(10);
 		},
 		num: 155,
@@ -3905,8 +3919,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Water",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Water' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Water' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -3914,7 +3928,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 185,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Water-type attack. Single use.",
@@ -3928,8 +3942,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Psychic",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Psychic' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Psychic' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -3937,7 +3951,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 193,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Psychic-type attack. Single use.",
@@ -3951,12 +3965,12 @@ let BattleItems = {
 			basePower: 80,
 			type: "Electric",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.cureStatus();
 			}
@@ -3974,12 +3988,12 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ground",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			pokemon.removeVolatile('confusion');
 		},
 		num: 156,
@@ -3995,12 +4009,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Poison",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.boost({spa: 1});
 		},
 		num: 204,
@@ -4013,7 +4027,7 @@ let BattleItems = {
 		spritenum: 622,
 		megaStone: "Pidgeot-Mega",
 		megaEvolves: "Pidgeot",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -4065,7 +4079,7 @@ let BattleItems = {
 		spritenum: 602,
 		megaStone: "Pinsir-Mega",
 		megaEvolves: "Pinsir",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -4079,12 +4093,12 @@ let BattleItems = {
 		spritenum: 610,
 		onPlate: 'Fairy',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fairy') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -4115,7 +4129,7 @@ let BattleItems = {
 			status: 'psn',
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -4130,7 +4144,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 344,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Poison') {
 				if (source.useItem()) {
@@ -4148,7 +4162,7 @@ let BattleItems = {
 		name: "Poison Memory",
 		spritenum: 670,
 		onMemory: 'Poison',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -4202,7 +4216,7 @@ let BattleItems = {
 		fling: {
 			basePower: 70,
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 293,
@@ -4217,7 +4231,7 @@ let BattleItems = {
 		fling: {
 			basePower: 70,
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 292,
@@ -4232,7 +4246,7 @@ let BattleItems = {
 		fling: {
 			basePower: 70,
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 290,
@@ -4247,7 +4261,7 @@ let BattleItems = {
 		fling: {
 			basePower: 70,
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 289,
@@ -4256,9 +4270,11 @@ let BattleItems = {
 	},
 	"powerherb": {
 		id: "powerherb",
-		onChargeMove: function (pokemon, target, move) {
+		onChargeMove(pokemon, target, move) {
 			if (pokemon.useItem()) {
 				this.debug('power herb - remove charge turn for ' + move.id);
+				this.attrLastMove('[still]');
+				this.addMove('-anim', pokemon, move.name, target);
 				return false; // skip charge turn
 			}
 		},
@@ -4279,7 +4295,7 @@ let BattleItems = {
 		fling: {
 			basePower: 70,
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 291,
@@ -4294,7 +4310,7 @@ let BattleItems = {
 		fling: {
 			basePower: 70,
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
 		num: 294,
@@ -4340,11 +4356,11 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAttractPriority: -1,
-		onAttract: function (target, source, effect) {
+		onAttract(target, source) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
 		},
 		onBoostPriority: -1,
-		onBoost: function (boost, target, source, effect) {
+		onBoost(boost, target, source, effect) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
 				if (effect && effect.effectType === 'Ability') {
 					// Ability activation always happens for boosts
@@ -4354,7 +4370,7 @@ let BattleItems = {
 			}
 		},
 		onDamagePriority: -1,
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-activate', source, effect.fullname);
@@ -4363,7 +4379,7 @@ let BattleItems = {
 				return false;
 			}
 		},
-		onSetAbility: function (ability, target, source, effect) {
+		onSetAbility(ability, target, source, effect) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-activate', source, effect.fullname);
@@ -4372,7 +4388,7 @@ let BattleItems = {
 				return false;
 			}
 		},
-		onSetStatus: function (status, target, source, effect) {
+		onSetStatus(status, target, source, effect) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
 		},
 		num: 880,
@@ -4396,7 +4412,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 369,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Psychic') {
 				if (source.useItem()) {
@@ -4414,7 +4430,7 @@ let BattleItems = {
 		name: "Psychic Memory",
 		spritenum: 680,
 		onMemory: 'Psychic',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -4432,9 +4448,14 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate: function (pokemon) {
-			if (this.isTerrain('psychicterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain') && pokemon.useItem()) {
 				this.boost({spd: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.field.isTerrain('psychicterrain') && this.effectData.target.useItem()) {
+				this.boost({spd: 1}, this.effectData.target);
 			}
 		},
 		num: 882,
@@ -4479,7 +4500,7 @@ let BattleItems = {
 	"quickclaw": {
 		id: "quickclaw",
 		onModifyPriorityPriority: -1,
-		onModifyPriority: function (priority, pokemon) {
+		onModifyPriority(priority, pokemon) {
 			if (this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
 				return Math.round(priority) + 0.1;
@@ -4501,7 +4522,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifySpe: function (spe, pokemon) {
+		onModifySpe(spe, pokemon) {
 			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
@@ -4545,12 +4566,12 @@ let BattleItems = {
 			basePower: 80,
 			type: "Grass",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'brn') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'brn') {
 				pokemon.cureStatus();
 			}
@@ -4566,7 +4587,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		onModifyCritRatio: function (critRatio) {
+		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
 		num: 326,
@@ -4583,7 +4604,7 @@ let BattleItems = {
 			volatileStatus: 'flinch',
 		},
 		onModifyMovePriority: -1,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
 				for (const secondary of move.secondaries) {
@@ -4633,7 +4654,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && source.hp && target.hp && move && move.category !== 'Status') {
 				if (!source.isActive || !this.canSwitch(source.side) || source.forceSwitchFlag || target.forceSwitchFlag) return;
 				if (target.useItem(source)) { // This order is correct - the item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
@@ -4651,15 +4672,15 @@ let BattleItems = {
 		id: "redorb",
 		name: "Red Orb",
 		spritenum: 390,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Groudon') {
 				this.insertQueue({pokemon: pokemon, choice: 'runPrimal'});
 			}
 		},
-		onPrimal: function (pokemon) {
+		onPrimal(pokemon) {
 			pokemon.formeChange('Groudon-Primal', this.effect, true);
 		},
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (source.baseTemplate.baseSpecies === 'Groudon') return false;
 			return true;
 		},
@@ -4684,8 +4705,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Grass",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Grass' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Grass' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -4693,7 +4714,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 187,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Grass-type attack. Single use.",
@@ -4716,7 +4737,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 415,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Rock') {
 				if (source.useItem()) {
@@ -4737,7 +4758,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Rock') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -4751,7 +4772,7 @@ let BattleItems = {
 		name: "Rock Memory",
 		spritenum: 672,
 		onMemory: 'Rock',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -4783,7 +4804,7 @@ let BattleItems = {
 			basePower: 60,
 		},
 		onAfterDamageOrder: 2,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 6, source, target);
 			}
@@ -4811,7 +4832,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -4829,8 +4850,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Fairy",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Fairy' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fairy' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -4838,7 +4859,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 686,
 		gen: 6,
 		desc: "Halves damage taken from a supereffective Fairy-type attack. Single use.",
@@ -4846,21 +4867,20 @@ let BattleItems = {
 	"rowapberry": {
 		id: "rowapberry",
 		name: "Rowap Berry",
-		isUnreleased: true,
 		spritenum: 420,
 		isBerry: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Dark",
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (source && source.hp && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target);
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 212,
 		gen: 4,
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use.",
@@ -4871,7 +4891,7 @@ let BattleItems = {
 		spritenum: 614,
 		megaStone: "Sableye-Mega",
 		megaEvolves: "Sableye",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -4905,10 +4925,10 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
-		onTryHit: function (pokemon, source, move) {
+		onTryHit(pokemon, source, move) {
 			if (move.flags['powder'] && pokemon !== source && this.getImmunity('powder', pokemon)) {
 				this.add('-activate', pokemon, 'item: Safety Goggles', move.name);
 				return null;
@@ -4938,12 +4958,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Fighting",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.boost({spe: 1});
 		},
 		num: 203,
@@ -4956,7 +4976,7 @@ let BattleItems = {
 		spritenum: 627,
 		megaStone: "Salamence-Mega",
 		megaEvolves: "Salamence",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -4970,7 +4990,7 @@ let BattleItems = {
 		spritenum: 613,
 		megaStone: "Sceptile-Mega",
 		megaEvolves: "Sceptile",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -4984,7 +5004,7 @@ let BattleItems = {
 		spritenum: 605,
 		megaStone: "Scizor-Mega",
 		megaEvolves: "Scizor",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -4999,7 +5019,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyCritRatio: function (critRatio) {
+		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
 		num: 232,
@@ -5014,7 +5034,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5031,7 +5051,7 @@ let BattleItems = {
 			basePower: 50,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Flying') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5046,7 +5066,7 @@ let BattleItems = {
 		spritenum: 619,
 		megaStone: "Sharpedo-Mega",
 		megaEvolves: "Sharpedo",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -5062,7 +5082,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onTrapPokemonPriority: -10,
-		onTrapPokemon: function (pokemon) {
+		onTrapPokemon(pokemon) {
 			pokemon.trapped = pokemon.maybeTrapped = false;
 		},
 		num: 295,
@@ -5077,7 +5097,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAfterMoveSecondarySelfPriority: -1,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.category !== 'Status') {
 				this.heal(pokemon.lastDamage / 8, pokemon);
 			}
@@ -5102,7 +5122,7 @@ let BattleItems = {
 		id: "shockdrive",
 		name: "Shock Drive",
 		spritenum: 442,
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
 			}
@@ -5123,8 +5143,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ground",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Ground' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Ground' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -5132,7 +5152,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 191,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Ground-type attack. Single use.",
@@ -5145,7 +5165,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Normal') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5162,7 +5182,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5180,15 +5200,15 @@ let BattleItems = {
 			basePower: 80,
 			type: "Psychic",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 4);
 		},
 		num: 158,
@@ -5212,12 +5232,12 @@ let BattleItems = {
 		spritenum: 450,
 		onPlate: 'Flying',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Flying') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -5234,7 +5254,7 @@ let BattleItems = {
 		spritenum: 620,
 		megaStone: "Slowbro-Mega",
 		megaEvolves: "Slowbro",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -5272,7 +5292,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move.type === 'Ice' && target.useItem()) {
 				this.boost({atk: 1});
 			}
@@ -5289,7 +5309,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ground') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5318,7 +5338,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && (user.baseTemplate.num === 380 || user.baseTemplate.num === 381) && (move.type === 'Psychic' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5335,7 +5355,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5365,12 +5385,12 @@ let BattleItems = {
 		spritenum: 463,
 		onPlate: 'Water',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -5387,12 +5407,12 @@ let BattleItems = {
 		spritenum: 464,
 		onPlate: 'Ghost',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -5420,12 +5440,12 @@ let BattleItems = {
 			basePower: 100,
 			type: "Psychic",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			let stats = [];
 			for (let stat in pokemon.boosts) {
 				// @ts-ignore
@@ -5435,6 +5455,7 @@ let BattleItems = {
 			}
 			if (stats.length) {
 				let randomStat = this.sample(stats);
+				/**@type {{[k: string]: number}} */
 				let boost = {};
 				boost[randomStat] = 2;
 				this.boost(boost);
@@ -5450,7 +5471,7 @@ let BattleItems = {
 		spritenum: 621,
 		megaStone: "Steelix-Mega",
 		megaEvolves: "Steelix",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -5464,7 +5485,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 473,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Steel') {
 				if (source.useItem()) {
@@ -5482,7 +5503,7 @@ let BattleItems = {
 		name: "Steel Memory",
 		spritenum: 675,
 		onMemory: 'Steel',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -5513,7 +5534,7 @@ let BattleItems = {
 			basePower: 60,
 		},
 		spritenum: 475,
-		onModifyCritRatio: function (critRatio, user) {
+		onModifyCritRatio(critRatio, user) {
 			if (user.baseTemplate.species === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
@@ -5531,10 +5552,10 @@ let BattleItems = {
 		},
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			this.damage(pokemon.maxhp / 8);
 		},
-		onHit: function (target, source, move) {
+		onHit(target, source, move) {
 			if (source && source !== target && !source.item && move && move.flags['contact']) {
 				let barb = target.takeItem();
 				if (!barb) return; // Gen 4 Multitype
@@ -5552,12 +5573,12 @@ let BattleItems = {
 		spritenum: 477,
 		onPlate: 'Rock',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Rock') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -5586,7 +5607,7 @@ let BattleItems = {
 		spritenum: 612,
 		megaStone: "Swampert-Mega",
 		megaEvolves: "Swampert",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -5617,8 +5638,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Bug",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Bug' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Bug' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -5626,7 +5647,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 194,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Bug-type attack. Single use.",
@@ -5662,7 +5683,7 @@ let BattleItems = {
 			basePower: 90,
 		},
 		onModifyAtkPriority: 1,
-		onModifyAtk: function (atk, pokemon) {
+		onModifyAtk(atk, pokemon) {
 			if (pokemon.baseTemplate.baseSpecies === 'Cubone' || pokemon.baseTemplate.baseSpecies === 'Marowak') {
 				return this.chainModify(2);
 			}
@@ -5701,7 +5722,7 @@ let BattleItems = {
 		},
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			pokemon.trySetStatus('tox', pokemon);
 		},
 		num: 272,
@@ -5714,12 +5735,12 @@ let BattleItems = {
 		spritenum: 516,
 		onPlate: 'Poison',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -5738,7 +5759,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5753,7 +5774,7 @@ let BattleItems = {
 		spritenum: 607,
 		megaStone: "Tyranitar-Mega",
 		megaEvolves: "Tyranitar",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -5798,7 +5819,7 @@ let BattleItems = {
 		spritenum: 608,
 		megaStone: "Venusaur-Mega",
 		megaEvolves: "Venusaur",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
@@ -5815,8 +5836,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Electric",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Electric' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Electric' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -5824,7 +5845,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 186,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Electric-type attack. Single use.",
@@ -5835,7 +5856,7 @@ let BattleItems = {
 		isUnreleased: true,
 		spritenum: 528,
 		isGem: true,
-		onSourceTryPrimaryHit: function (target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
 			if (move.type === 'Water') {
 				if (source.useItem()) {
@@ -5853,7 +5874,7 @@ let BattleItems = {
 		name: "Water Memory",
 		spritenum: 677,
 		onMemory: 'Water',
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
 				return false;
 			}
@@ -5912,7 +5933,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
@@ -5929,8 +5950,8 @@ let BattleItems = {
 			basePower: 80,
 		},
 		onHitPriority: 1,
-		onHit: function (target, source, move) {
-			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && move.typeMod > 0 && target.useItem()) {
+		onHit(target, source, move) {
+			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0 && target.useItem()) {
 				this.boost({atk: 2, spa: 2});
 			}
 		},
@@ -5970,8 +5991,9 @@ let BattleItems = {
 		spritenum: 535,
 		fling: {
 			basePower: 10,
-			effect: function (pokemon) {
+			effect(pokemon) {
 				let activate = false;
+				/**@type {{[k: string]: number}} */
 				let boosts = {};
 				for (let i in pokemon.boosts) {
 					// @ts-ignore
@@ -5986,8 +6008,9 @@ let BattleItems = {
 				}
 			},
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			let activate = false;
+			/**@type {{[k: string]: number}} */
 			let boosts = {};
 			for (let i in pokemon.boosts) {
 				// @ts-ignore
@@ -6012,7 +6035,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onSourceModifyAccuracy: function (accuracy) {
+		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy === 'number') {
 				return accuracy * 1.1;
 			}
@@ -6030,15 +6053,15 @@ let BattleItems = {
 			basePower: 80,
 			type: "Rock",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
@@ -6056,7 +6079,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.category === 'Special') {
 				return this.chainModify([0x1199, 0x1000]);
 			}
@@ -6074,8 +6097,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ice",
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.type === 'Ice' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Ice' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -6083,7 +6106,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onEat: function () { },
+		onEat() { },
 		num: 188,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Ice-type attack. Single use.",
@@ -6094,12 +6117,12 @@ let BattleItems = {
 		spritenum: 572,
 		onPlate: 'Electric',
 		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onTakeItem: function (item, pokemon, source) {
+		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
 				return false;
 			}
@@ -6117,7 +6140,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onSourceModifyAccuracy: function (accuracy, target) {
+		onSourceModifyAccuracy(accuracy, target) {
 			if (typeof accuracy === 'number' && !this.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
 				return accuracy * 1.2;
@@ -6134,14 +6157,14 @@ let BattleItems = {
 		id: "berserkgene",
 		name: "Berserk Gene",
 		spritenum: 388,
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			this.boost({atk: 2});
 			pokemon.addVolatile('confusion');
 			pokemon.setItem('');
 		},
 		num: 0,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
 	},
 	"berry": {
@@ -6154,20 +6177,20 @@ let BattleItems = {
 			type: "Poison",
 		},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(10);
 		},
 		num: 155,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use.",
 	},
 	"bitterberry": {
@@ -6179,17 +6202,17 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ground",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			pokemon.removeVolatile('confusion');
 		},
 		num: 156,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is confused. Single use.",
 	},
 	"burntberry": {
@@ -6201,19 +6224,19 @@ let BattleItems = {
 			basePower: 80,
 			type: "Ice",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.cureStatus();
 			}
 		},
 		num: 153,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is frozen. Single use.",
 	},
 	"goldberry": {
@@ -6226,20 +6249,20 @@ let BattleItems = {
 			type: "Psychic",
 		},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
-		onTryEatItem: function (item, pokemon) {
+		onTryEatItem(item, pokemon) {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(30);
 		},
 		num: 158,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use.",
 	},
 	"iceberry": {
@@ -6251,19 +6274,19 @@ let BattleItems = {
 			basePower: 80,
 			type: "Grass",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'brn') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'brn') {
 				pokemon.cureStatus();
 			}
 		},
 		num: 152,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is burned. Single use.",
 	},
 	"mintberry": {
@@ -6275,19 +6298,19 @@ let BattleItems = {
 			basePower: 80,
 			type: "Water",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'slp') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'slp') {
 				pokemon.cureStatus();
 			}
 		},
 		num: 150,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder wakes up if it is asleep. Single use.",
 	},
 	"miracleberry": {
@@ -6299,18 +6322,18 @@ let BattleItems = {
 			basePower: 80,
 			type: "Flying",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status || pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			pokemon.cureStatus();
 			pokemon.removeVolatile('confusion');
 		},
 		num: 157,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use.",
 	},
 	"mysteryberry": {
@@ -6322,7 +6345,7 @@ let BattleItems = {
 			basePower: 80,
 			type: "Fighting",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (!pokemon.hp) return;
 			let moveSlot = pokemon.lastMove && pokemon.getMoveData(pokemon.lastMove.id);
 			if (moveSlot && moveSlot.pp === 0) {
@@ -6331,7 +6354,7 @@ let BattleItems = {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			let moveSlot;
 			if (pokemon.volatiles['leppaberry']) {
 				moveSlot = pokemon.volatiles['leppaberry'].moveSlot;
@@ -6349,50 +6372,41 @@ let BattleItems = {
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move);
 			if (pokemon.item !== 'leppaberry') {
-				let foeActive = pokemon.side.foe.active;
-				let foeIsStale = false;
-				for (let i = 0; i < foeActive.length; i++) {
-					if (foeActive[i].isStale >= 2) {
-						foeIsStale = true;
-						break;
-					}
-				}
-				if (!foeIsStale) return;
+				pokemon.isStale = 2;
+				pokemon.isStaleSource = 'useleppa';
 			}
-			pokemon.isStale = 2;
-			pokemon.isStaleSource = 'useleppa';
 		},
 		num: 154,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
 	},
 	"pinkbow": {
 		id: "pinkbow",
 		name: "Pink Bow",
 		spritenum: 444,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Normal') {
 				return basePower * 1.1;
 			}
 		},
 		num: 251,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
 	"polkadotbow": {
 		id: "polkadotbow",
 		name: "Polkadot Bow",
 		spritenum: 444,
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Normal') {
 				return basePower * 1.1;
 			}
 		},
 		num: 251,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
 	"przcureberry": {
@@ -6404,19 +6418,19 @@ let BattleItems = {
 			basePower: 80,
 			type: "Fire",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.cureStatus();
 			}
 		},
 		num: 149,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is paralyzed. Single use.",
 	},
 	"psncureberry": {
@@ -6428,19 +6442,19 @@ let BattleItems = {
 			basePower: 80,
 			type: "Electric",
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.cureStatus();
 			}
 		},
 		num: 151,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is poisoned. Single use.",
 	},
 
@@ -6452,13 +6466,13 @@ let BattleItems = {
 		spritenum: 577,
 		megaStone: "Crucibelle-Mega",
 		megaEvolves: "Crucibelle",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
 		num: -1,
 		gen: 6,
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
 };

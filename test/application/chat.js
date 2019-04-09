@@ -41,8 +41,16 @@ describe('Chat', function () {
 			`hi <a href="http://google.com/__a__" rel="noopener" target="_blank">google.com/__a__</a> bye &gt;w&lt;`
 		);
 		assert.strictEqual(
+			Chat.formatText(`(https://en.wikipedia.org/wiki/Pokémon_(video_game_series))`),
+			`(<a href="https://en.wikipedia.org/wiki/Pokémon_(video_game_series)" rel="noopener" target="_blank">https://en.wikipedia.org/wiki/Pokémon_(video_game_series)</a>)`
+		);
+		assert.strictEqual(
 			Chat.formatText(`hi email@email.com bye >w<`),
 			`hi <a href="mailto:email@email.com" rel="noopener" target="_blank">email@email.com</a> bye &gt;w&lt;`
+		);
+		assert.strictEqual(
+			Chat.formatText(`hi email@email.example bye >w<`),
+			`hi <a href="mailto:email@email.example" rel="noopener" target="_blank">email@email.example</a> bye &gt;w&lt;`
 		);
 		assert.strictEqual(
 			Chat.formatText(`>greentext`),
@@ -63,6 +71,10 @@ describe('Chat', function () {
 		assert.strictEqual(
 			Chat.formatText(`[[wiki: Pokemon]] >w<`, true),
 			`<a href="//en.wikipedia.org/w/index.php?title=Special:Search&search=Pokemon" target="_blank">wiki: Pokemon</a> &gt;w&lt;`
+		);
+		assert.strictEqual(
+			Chat.formatText(`[[wiki: D&D D&amp;D]] [[A>B A&gt;B]] &amp;`, true),
+			`<a href="//en.wikipedia.org/w/index.php?title=Special:Search&search=D%26D%20D%26amp%3BD" target="_blank">wiki: D&amp;D D&amp;amp;D</a> <a href="//www.google.com/search?ie=UTF-8&btnI&q=A%3EB%20A%26gt%3BB" target="_blank">A&gt;B A&amp;gt;B</a> &amp;amp;`
 		);
 		assert.strictEqual(
 			Chat.formatText(`[[pokemon: Oshawott]] >w<`, true),
