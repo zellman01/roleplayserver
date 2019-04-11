@@ -4,7 +4,7 @@
 !/config/avatars/README.md
 !/config/chat-plugins/README.md
 !/config/ladders/README.md
-!.config/custom-example.css
+!/config/custom-example.css
 /logs/*
 /node_modules
 /eslint-cache
