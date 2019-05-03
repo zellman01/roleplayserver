@@ -10,7 +10,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
 [![Build Status](https://api.travis-ci.com/zellman01/roleplayserver.svg)](https://travis-ci.com/zellman01/roleplayserver)
 [![Dependency Status](https://david-dm.org/zellman01/roleplayserver.svg)](https://david-dm.org/zellman01/roleplayserver)
 [![devDependency Status](https://david-dm.org/zellman01/roleplayserver/dev-status.svg)](https://david-dm.org/zellman01/roleplayserver?type=dev)
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/Zarel/Pokemon-Showdown.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Zarel/Pokemon-Showdown/alerts)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/zellman01/roleplayserver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/zellman01/roleplayserver/alerts)
 
 Introduction
 ------------------------------------------------------------------------
