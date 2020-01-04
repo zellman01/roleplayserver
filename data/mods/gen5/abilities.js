@@ -2,6 +2,22 @@
 
 /**@type {{[k: string]: ModdedAbilityData}} */
 let BattleAbilities = {
+	"anticipation": {
+		inherit: true,
+		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, while Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
+		onStart(pokemon) {
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.getMove(moveSlot.move);
+					if (move.category !== 'Status' && (this.dex.getImmunity(move.type, pokemon) && this.dex.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
+						this.add('-ability', pokemon, 'Anticipation');
+						return;
+					}
+				}
+			}
+		},
+	},
 	"frisk": {
 		inherit: true,
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
@@ -16,6 +32,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon's moves ignore the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
 		shortDesc: "This Pokemon's moves ignore the foe's Reflect, Light Screen, Safeguard, and Mist.",
+		rating: 1.5,
 	},
 	"keeneye": {
 		inherit: true,
@@ -45,6 +62,7 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to damage from Sandstorm or Hail.",
 		onTryHit() {},
+		rating: 0.5,
 	},
 	"sapsipper": {
 		inherit: true,

@@ -12,10 +12,10 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	par: {
@@ -47,8 +47,12 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'slp');
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Move') {
+				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+			} else {
+				this.add('-status', target, 'slp');
+			}
 			// 1-3 turns
 			this.effectData.startTime = this.random(1, 4);
 			this.effectData.time = this.effectData.startTime;
@@ -94,10 +98,10 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	tox: {
@@ -110,14 +114,14 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 		onAfterSwitchInSelf(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
 			pokemon.setStatus('psn');
 			pokemon.addVolatile('residualdmg');
 			pokemon.volatiles['residualdmg'].counter = 1;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	partiallytrapped: {

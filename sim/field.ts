@@ -4,17 +4,22 @@
  *
  * @license MIT
  */
+
+import {State} from './state';
+
 export class Field {
 	readonly battle: Battle;
+	readonly id: ID;
 
-	weather: string;
+	weather: ID;
 	weatherData: AnyObject;
-	terrain: string;
+	terrain: ID;
 	terrainData: AnyObject;
 	pseudoWeather: AnyObject;
 
 	constructor(battle: Battle) {
 		this.battle = battle;
+		this.id = '';
 
 		this.weather = '';
 		this.weatherData = {id: ''};
@@ -23,8 +28,12 @@ export class Field {
 		this.pseudoWeather = {};
 	}
 
+	toJSON(): AnyObject {
+		return State.serializeField(this);
+	}
+
 	setWeather(status: string | PureEffect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		status = this.battle.getEffect(status);
+		status = this.battle.dex.getEffect(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
@@ -71,6 +80,7 @@ export class Field {
 			this.weatherData = prevWeatherData;
 			return false;
 		}
+		this.battle.runEvent('WeatherStart', source, source, status);
 		return true;
 	}
 
@@ -102,17 +112,17 @@ export class Field {
 	isWeather(weather: string | string[]) {
 		const ourWeather = this.effectiveWeather();
 		if (!Array.isArray(weather)) {
-			return ourWeather === toId(weather);
+			return ourWeather === toID(weather);
 		}
-		return weather.map(toId).includes(ourWeather);
+		return weather.map(toID).includes(ourWeather);
 	}
 
 	getWeather() {
-		return this.battle.getEffect(this.weather);
+		return this.battle.dex.getEffectByID(this.weather);
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		status = this.battle.getEffect(status);
+		status = this.battle.dex.getEffect(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
@@ -157,13 +167,13 @@ export class Field {
 	isTerrain(terrain: string | string[], target?: Pokemon | Side | Battle) {
 		const ourTerrain = this.effectiveTerrain(target);
 		if (!Array.isArray(terrain)) {
-			return ourTerrain === toId(terrain);
+			return ourTerrain === toID(terrain);
 		}
-		return terrain.map(toId).includes(ourTerrain);
+		return terrain.map(toID).includes(ourTerrain);
 	}
 
 	getTerrain() {
-		return this.battle.getEffect(this.terrain);
+		return this.battle.dex.getEffectByID(this.terrain);
 	}
 
 	addPseudoWeather(
@@ -173,7 +183,7 @@ export class Field {
 	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
-		status = this.battle.getEffect(status);
+		status = this.battle.dex.getEffect(status);
 
 		let effectData = this.pseudoWeather[status.id];
 		if (effectData) {
@@ -198,12 +208,12 @@ export class Field {
 	}
 
 	getPseudoWeather(status: string | Effect) {
-		status = this.battle.getEffect(status);
+		status = this.battle.dex.getEffect(status);
 		return this.pseudoWeather[status.id] ? status : null;
 	}
 
 	removePseudoWeather(status: string | Effect) {
-		status = this.battle.getEffect(status);
+		status = this.battle.dex.getEffect(status);
 		const effectData = this.pseudoWeather[status.id];
 		if (!effectData) return false;
 		this.battle.singleEvent('End', status, effectData, this);

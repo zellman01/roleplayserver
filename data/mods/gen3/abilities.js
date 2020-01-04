@@ -83,7 +83,7 @@ let BattleAbilities = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({atk: -1}, target, pokemon);
+					this.boost({atk: -1}, target, pokemon, null, true);
 				}
 			}
 		},
@@ -140,14 +140,7 @@ let BattleAbilities = {
 	"pressure": {
 		inherit: true,
 		onStart(pokemon) {
-			this.add('split');
-			for (const line of [false, 0, 1, true]) {
-				if (line === true || line === pokemon.side.n % 2) {
-					this.add('-ability', pokemon, 'Pressure', '[silent]');
-				} else {
-					this.log.push('');
-				}
-			}
+			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
 		},
 	},
 	"roughskin": {
@@ -156,7 +149,7 @@ let BattleAbilities = {
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/16 of their max HP.",
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 16, source, target);
+				this.damage(source.baseMaxhp / 16, source, target);
 			}
 		},
 	},
@@ -185,7 +178,7 @@ let BattleAbilities = {
 			if (!pokemon.isStarted) return;
 			let target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
-			let ability = this.getAbility(target.ability);
+			let ability = this.dex.getAbility(target.ability);
 			let bannedAbilities = ['forecast', 'multitype', 'trace'];
 			if (bannedAbilities.includes(target.ability)) {
 				return;
@@ -195,13 +188,30 @@ let BattleAbilities = {
 			}
 		},
 	},
+	"truant": {
+		inherit: true,
+		onStart() {},
+		onSwitchIn(pokemon) {
+			pokemon.truantTurn = this.turn !== 0;
+		},
+		onBeforeMove(pokemon) {
+			if (pokemon.truantTurn) {
+				this.add('cant', pokemon, 'ability: Truant');
+				return false;
+			}
+		},
+		onResidualOrder: 27,
+		onResidual(pokemon) {
+			pokemon.truantTurn = !pokemon.truantTurn;
+		},
+	},
 	"voltabsorb": {
 		inherit: true,
 		desc: "This Pokemon is immune to damaging Electric-type moves and restores 1/4 of its maximum HP, rounded down, when hit by one.",
 		shortDesc: "This Pokemon heals 1/4 its max HP when hit by a damaging Electric move; immunity.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Volt Absorb');
 				}
 				return null;

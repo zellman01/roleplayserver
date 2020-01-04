@@ -645,13 +645,13 @@ let BattleFormatsData = {
 	},
 	chansey: {
 		inherit: true,
-		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock"],
+		randomBattleMoves: ["wish", "softboiled", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock"],
 		tier: "UUBL",
 		doublesTier: "NFE",
 	},
 	blissey: {
 		inherit: true,
-		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock", "flamethrower"],
+		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "thunderwave", "stealthrock", "flamethrower"],
 		tier: "OU",
 		doublesTier: "DUU",
 	},
@@ -1964,7 +1964,7 @@ let BattleFormatsData = {
 		battleOnly: true,
 	},
 	castformrainy: {
-		randomBattleMoves: ["raindance", "weatherball", "thunder", "hurricane"],
+		randomBattleMoves: ["raindance", "weatherball", "thunder", "icebeam"],
 		battleOnly: true,
 	},
 	castformsnowy: {
@@ -3507,9 +3507,14 @@ let BattleFormatsData = {
 	},
 	meloetta: {
 		inherit: true,
-		randomBattleMoves: ["relicsong", "closecombat", "calmmind", "psychic", "thunderbolt", "hypervoice", "uturn"],
+		randomBattleMoves: ["calmmind", "psychic", "psyshock", "focusblast", "shadowball", "hypervoice"],
 		tier: "UU",
 		doublesTier: "DUU",
+	},
+	meloettapirouette: {
+		randomBattleMoves: ["relicsong", "closecombat", "psychic", "thunderbolt"],
+		requiredMove: "Relic Song",
+		battleOnly: true,
 	},
 	genesect: {
 		inherit: true,
@@ -3532,6 +3537,82 @@ let BattleFormatsData = {
 	genesectshock: {
 		eventOnly: true,
 		requiredItem: "Shock Drive",
+	},
+	pokestarsmeargle: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarufo: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarufo2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarbrycenman: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarmt: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarmt2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestartransport: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestargiant: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestargiant2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarhumanoid: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarmonster: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarf00: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarf002: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarspirit: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarblackdoor: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarwhitedoor: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarblackbelt: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestargiantpropo2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarufopropu2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 };
 

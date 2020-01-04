@@ -306,7 +306,7 @@ let BattleFormatsData = {
 			baseMove1: "thunderbolt", baseMove2: "surf", baseMove3: "thunderwave",
 			fillerMoves1: ["reflect", "lightscreen"],
 		},
-		tier: "NU",
+		tier: "NUBL",
 	},
 	sandshrew: {
 		tier: "LC",
@@ -642,12 +642,12 @@ let BattleFormatsData = {
 			item: ["leftovers", "leftovers", "miracleberry"],
 			baseMove1: "icebeam", baseMove2: "hypnosis",
 			fillerMoves1: ["return", "return", "return", "bodyslam", "doubleedge"],
-			fillerMoves2: ["irontail", "shadowball", "hiddenpowerground"],
+			fillerMoves2: ["irontail", "swagger", "hiddenpowerground"],
 		},
 		randomSet2: { // Substitute attacker
 			chance: 13,
 			item: ["leftovers"],
-			baseMove1: "substitute", baseMove2: "icebeam",
+			baseMove1: "substitute", baseMove2: "swagger",
 			fillerMoves1: ["return", "return", "bodyslam", "doubleedge"],
 			fillerMoves2: ["irontail", "shadowball", "hiddenpowerground"],
 		},
@@ -656,7 +656,7 @@ let BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "rest", baseMove2: "sleeptalk",
 			fillerMoves1: ["return", "return", "bodyslam", "doubleedge"],
-			fillerMoves2: ["icebeam", "icebeam", "irontail"],
+			fillerMoves2: ["substitute", "substitute", "irontail"],
 		},
 		tier: "NU",
 	},
@@ -676,7 +676,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["surf", "surf", "hydropump"],
 			fillerMoves2: ["hypnosis", "hypnosis", "hypnosis", "hiddenpowerelectric", "psychic"],
 		},
-		tier: "NU",
+		tier: "NUBL",
 	},
 	mankey: {
 		tier: "LC",
@@ -760,7 +760,7 @@ let BattleFormatsData = {
 			fillerMoves2: ["icebeam", "icebeam", "bodyslam"],
 			fillerMoves3: ["lovelykiss", "lovelykiss", "lovelykiss", "lovelykiss", "dynamicpunch", "bodyslam", "counter"],
 		},
-		tier: "NU",
+		tier: "NUBL",
 	},
 	politoed: {
 		randomSet1: { // Belly Drum
@@ -914,7 +914,7 @@ let BattleFormatsData = {
 			baseMove1: "earthquake", baseMove2: "rockslide", baseMove3: "explosion",
 			fillerMoves1: ["curse", "hiddenpowerbug", "fireblast", "rapidspin", "roar"],
 		},
-		tier: "UUBL",
+		tier: "OU",
 	},
 	ponyta: {
 		eventPokemon: [
@@ -1785,7 +1785,7 @@ let BattleFormatsData = {
 			baseMove1: "meanlook", baseMove2: "perishsong", baseMove3: "protect",
 			fillerMoves1: ["icebeam", "icebeam", "substitute"],
 		},
-		tier: "UUBL",
+		tier: "OU",
 	},
 	elekid: {
 		eventPokemon: [
@@ -1864,7 +1864,7 @@ let BattleFormatsData = {
 			fillerMoves2: ["hiddenpowerbug", "hiddenpowerrock", "hiddenpowerground"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves": ["vicegrip", "rockthrow"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["visegrip", "rockthrow"]},
 		],
 		tier: "UU",
 	},
@@ -2040,7 +2040,7 @@ let BattleFormatsData = {
 			item: ["leftovers", "miracleberry"],
 			baseMove1: "growth", baseMove2: "thunderbolt", baseMove3: "agility", baseMove4: "batonpass",
 		},
-		tier: "OU",
+		tier: "UUBL",
 	},
 	flareon: {
 		randomSet1: { // Mixed Attacker
@@ -2152,7 +2152,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["return", "return", "doubleedge"],
 			fillerMoves2: ["thunderbolt", "thunderbolt", "thunder", "thunderwave", "thunderwave"],
 		},
-		tier: "OU",
+		tier: "UUBL",
 	},
 	omanyte: {
 		eventPokemon: [
@@ -2489,7 +2489,7 @@ let BattleFormatsData = {
 			chance: 11,
 			item: ["leftovers", "leftovers", "leftovers", "miracleberry"],
 			baseMove1: "fireblast", baseMove2: "earthquake", baseMove3: "thunderpunch",
-			fillerMoves1: ["hiddenpowerice", "hiddenpowerice", "hiddenpowerice", "counter"],
+			fillerMoves1: ["hiddenpowerice", "hiddenpowerice", "hiddenpowerice"],
 		},
 		randomSet2: {
 			chance: 14,
@@ -2547,7 +2547,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["watergun", "bite", "scaryface", "slash"]},
 		],
-		tier: "UU",
+		tier: "NUBL",
 	},
 	sentret: {
 		eventPokemon: [
@@ -2603,7 +2603,7 @@ let BattleFormatsData = {
 			chance: 10,
 			item: ["leftovers"],
 			baseMove1: "reflect",
-			fillerMoves1: ["doubleedge", "doubleedge", "return", "nightshade", "nightshade"],
+			fillerMoves1: ["hiddenpowerflying", "hiddenpowerflying", "return", "nightshade", "nightshade"],
 			fillerMoves2: ["rest", "hypnosis", "toxic"],
 			fillerMoves3: ["whirlwind", "whirlwind", "whirlwind", "nightshade", "toxic", "rest"],
 		},
@@ -2611,14 +2611,14 @@ let BattleFormatsData = {
 			chance: 14,
 			item: ["leftovers"],
 			baseMove1: "curse", baseMove2: "hypnosis",
-			fillerMoves1: ["doubleedge", "return"],
+			fillerMoves1: ["hiddenpowerflying", "return"],
 			fillerMoves2: ["steelwing", "nightshade"],
 		},
 		randomSet3: { // Thief
 			chance: 16,
 			item: [""],
 			baseMove1: "thief", baseMove2: "hypnosis", baseMove3: "nightshade",
-			fillerMoves1: ["doubleedge", "return"],
+			fillerMoves1: ["hiddenpowerflying", "return"],
 		},
 		tier: "NU",
 	},
@@ -2632,8 +2632,8 @@ let BattleFormatsData = {
 		randomSet1: { // Agility + Baton Pass
 			chance: 6,
 			item: ["leftovers"],
-			baseMove1: "agility", baseMove2: "substitute", baseMove3: "batonpass",
-			fillerMoves1: ["reflect", "lightscreen", "toxic", "barrier"],
+			baseMove1: "agility", baseMove2: "toxic", baseMove3: "batonpass",
+			fillerMoves1: ["reflect", "lightscreen", "barrier"],
 		},
 		randomSet2: { // Curse + Baton Pass
 			chance: 10,
@@ -2855,7 +2855,7 @@ let BattleFormatsData = {
 			chance: 10,
 			item: ["leftovers"],
 			baseMove1: "sleeppowder", baseMove2: "stunspore", baseMove3: "leechseed",
-			fillerMoves1: ["encore", "gigadrain", "hiddenpowerflying", "hiddenpowerflying", "substitute"],
+			fillerMoves1: ["encore", "gigadrain", "hiddenpowerflying", "hiddenpowerflying"],
 		},
 		randomSet2: { // Status 2
 			chance: 16,
@@ -2871,8 +2871,8 @@ let BattleFormatsData = {
 			chance: 8,
 			item: ["leftovers"],
 			baseMove1: "batonpass", baseMove2: "return",
-			fillerMoves1: ["curse", "curse", "agility", "substitute"],
-			fillerMoves2: ["curse", "curse", "agility", "substitute"],
+			fillerMoves1: ["curse", "curse", "agility", "counter"],
+			fillerMoves2: ["curse", "curse", "agility", "counter"],
 		},
 		randomSet2: { // Curse + 3 attacks
 			chance: 12,
@@ -3059,7 +3059,7 @@ let BattleFormatsData = {
 			chance: 10,
 			item: ["leftovers"],
 			baseMove1: "batonpass", baseMove2: "agility", baseMove3: "psychic",
-			fillerMoves1: ["substitute", "substitute", "return", "earthquake", "thunderbolt"],
+			fillerMoves1: ["return", "crunch", "return", "earthquake", "thunderbolt"],
 		},
 		randomSet3: { // Curse + BP
 			chance: 14,
@@ -3081,7 +3081,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	forretress: { // Spikes
-		randomSet3: {
+		randomSet1: {
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "spikes", baseMove2: "explosion",

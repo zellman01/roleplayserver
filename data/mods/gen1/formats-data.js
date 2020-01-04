@@ -217,7 +217,7 @@ let BattleFormatsData = {
 		tier: "UU",
 	},
 	zubat: {
-		randomBattleMoves: ["screech", "confuseray", "doubleedge", "megadrain"],
+		randomBattleMoves: ["toxic", "confuseray", "doubleedge", "megadrain"],
 		tier: "LC",
 	},
 	golbat: {
@@ -382,7 +382,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["sleeppowder", "bodyslam", "stunspore"],
 		essentialMove: "razorleaf",
 		comboMoves: ["swordsdance", "hyperbeam"],
-		tier: "UU",
+		tier: "OU",
 	},
 	tentacool: {
 		randomBattleMoves: ["barrier", "hydropump", "surf"],
@@ -406,7 +406,7 @@ let BattleFormatsData = {
 	},
 	golem: {
 		randomBattleMoves: ["explosion", "bodyslam", "earthquake", "rockslide"],
-		tier: "OU",
+		tier: "UU",
 	},
 	ponyta: {
 		randomBattleMoves: ["fireblast", "agility", "bodyslam", "reflect"],
@@ -495,7 +495,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["explosion", "megadrain", "nightshade", "psychic"],
 		essentialMove: "thunderbolt",
 		exclusiveMoves: ["hypnosis", "hypnosis", "confuseray"],
-		tier: "NFE",
+		tier: "UU",
 	},
 	gengar: {
 		randomBattleMoves: ["explosion", "megadrain", "nightshade", "psychic"],
@@ -719,9 +719,8 @@ let BattleFormatsData = {
 		tier: "UU",
 	},
 	omanyte: {
-		randomBattleMoves: ["hydropump", "surf", "bodyslam"],
-		essentialMove: "seismictoss",
-		exclusiveMoves: ["blizzard", "blizzard"],
+		randomBattleMoves: ["hydropump", "surf", "bodyslam", "rest"],
+		essentialMove: "blizzard",
 		comboMoves: ["surf", "hydropump"],
 		tier: "LC",
 	},
@@ -797,6 +796,10 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		tier: "Uber",
+	},
+	missingno: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
 	},
 };
 

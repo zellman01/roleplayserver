@@ -111,7 +111,7 @@ let BattleAbilities = {
 			for (const target of pokemon.side.foe.active) {
 				if (target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
-					let move = this.getMove(moveSlot.move);
+					let move = this.dex.getMove(moveSlot.move);
 					let bp = move.basePower;
 					if (move.ohko) bp = 160;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
@@ -160,7 +160,7 @@ let BattleAbilities = {
 				} else if (target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn') {
 					this.hint("In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing.");
 				} else {
-					this.boost({atk: -1}, target, pokemon);
+					this.boost({atk: -1}, target, pokemon, null, true);
 				}
 			}
 		},
@@ -323,6 +323,10 @@ let BattleAbilities = {
 		rating: 4,
 		num: 86,
 	},
+	"soundproof": {
+		inherit: true,
+		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
+	},
 	"stench": {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
@@ -378,7 +382,7 @@ let BattleAbilities = {
 			if (effect && effect.id === 'toxicspikes') return;
 			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
-			if (id === 'tox') id = 'psn';
+			if (id === 'tox') id = /** @type {ID} */('psn');
 			source.trySetStatus(id, target);
 		},
 	},
@@ -416,7 +420,7 @@ let BattleAbilities = {
 			if (!pokemon.isStarted) return;
 			let target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
-			let ability = this.getAbility(target.ability);
+			let ability = this.dex.getAbility(target.ability);
 			let bannedAbilities = ['forecast', 'multitype', 'trace'];
 			if (bannedAbilities.includes(target.ability)) {
 				return;

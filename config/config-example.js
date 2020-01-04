@@ -61,7 +61,6 @@ exports.ssl = null;
 
 /*
 // example:
-const fs = require('fs');
 exports.ssl = {
 	port: 443,
 	options: {
@@ -84,7 +83,8 @@ Main's SSL deploy script from Let's Encrypt looks like:
  *   This can be either false (meaning not to trust any proxies) or an array
  *   of strings. Each string should be either an IP address or a subnet given
  *   in CIDR notation. You should usually leave this as `false` unless you
- *   know what you are doing.
+ *   know what you are doing
+ * @type {false | string[]}.
  */
 exports.proxyip = false;
 
@@ -102,12 +102,6 @@ exports.ofe = false;
  *   in every Random Battle team.
  */
 exports.potd = '';
-
-/**
- * Legend list - This is a list for all of the legend/mythicals in the core games.
- */
-exports.legendList = ['Articuno', 'Zapdos', 'Moltres', 'Mewtwo', 'Mew', 'Raikou', 'Entei', 'Suicune', 'Lugia', 'Ho-Oh', 'Celebi', 'Regirock', 'Regice', 'Registeel', 'Latias', 'Latios', 'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys', 'Uxie', 'Mesprit', 'Azelf', 'Dialga', 'Palkia', 'Heatran', 'Regigigas', 'Giratina', 'Cresselia', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus', 'Victini', 'Cobalion', 'Terrakion', 'Virizion', 'Tornadus', 'Thundurus', 'Reshiram', 'Zekrom', 'Landorus', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion', 'Type: Null', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Tapu Bulu', 'Tapu Fini', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Nihilego', 'Buzzwole', 'Pheromosa', 'Xurkitree', 'Celesteela', 'Kartana', 'Guzzlord', 'Necrozma', 'Magearna', 'Marshadow', 'Stakataka', 'Blacephalon', 'Zeraora'];
-
 
 /**
  * crash guard - write errors to log file instead of crashing
@@ -143,6 +137,17 @@ Y929lRybWEiKUr+4Yw2O1W0CAwEAAQ==
 `;
 
 /**
+ * routes - where Pokemon Showdown is hosted.
+ *   Don't change this setting - there aren't any other options right now
+ */
+exports.routes = {
+	root: 'pokemonshowdown.com',
+	client: 'play.pokemonshowdown.com',
+	dex: 'dex.pokemonshowdown.com',
+	replays: 'replay.pokemonshowdown.com',
+};
+
+/**
  * crashguardemail - if the server has been running for more than an hour
  *   and crashes, send an email using these settings, rather than locking down
  *   the server. Uncomment this definition if you want to use this feature;
@@ -176,6 +181,11 @@ exports.crashguardemail = null;
  *   Greek or Cyrillic.
  */
 exports.disablebasicnamefilter = false;
+
+/**
+ * allowrequestingties - enables the use of `/offerdraw` and `/acceptdraw`
+ */
+exports.allowrequestingties = true;
 
 /**
  * report joins and leaves - shows messages like "<USERNAME> joined"
@@ -246,14 +256,17 @@ exports.restrictLinks = false;
 
 /**
   * chat modchat - default minimum group for speaking in chatrooms; changeable with /modchat
+  * @type {false | string}
  */
 exports.chatmodchat = false;
 /**
  * battle modchat - default minimum group for speaking in battles; changeable with /modchat
+ * @type {false | string}
  */
 exports.battlemodchat = false;
 /**
  * pm modchat - minimum group for PMing other users, challenging other users
+ * @type {false | string}
  */
 exports.pmmodchat = false;
 /**
@@ -393,8 +406,17 @@ exports.replsocketmode = 0o600;
 exports.disablehotpatchall = false;
 
 /**
+ * forcedpublicprefixes - user ID prefixes which will be forced to battle publicly.
+ * Battles involving user IDs which begin with one of the prefixes configured here
+ * will be unaffected by various battle privacy commands such as /modjoin, /hideroom
+ * or /ionext.
+ * @type {string[]}
+ */
+exports.forcedpublicprefixes = [];
+
+/**
  * permissions and groups:
- *   Each entry in `grouplist' is a seperate group. Some of the members are "special"
+ *   Each entry in `grouplist` is a seperate group. Some of the members are "special"
  *     while the rest is just a normal permission.
  *   The order of the groups determines their ranking.
  *   The special members are as follows:
@@ -466,7 +488,6 @@ exports.grouplist = [
 		roomdriver: true,
 		forcewin: true,
 		declare: true,
-		modchatall: true,
 		rangeban: true,
 		makeroom: true,
 		editroom: true,
@@ -489,7 +510,6 @@ exports.grouplist = [
 		editroom: true,
 		declare: true,
 		addhtml: true,
-		modchatall: true,
 		roomonly: true,
 		gamemanagement: true,
 	},
@@ -507,18 +527,6 @@ exports.grouplist = [
 		joinbattle: true,
 	},
 	{
-		symbol: '\u2606',
-		id: "player",
-		name: "Player",
-		inherit: '+',
-		roomvoice: true,
-		modchat: true,
-		roomonly: true,
-		joinbattle: true,
-		nooverride: true,
-		editprivacy: true,
-	},
-	{
 		symbol: '*',
 		id: "bot",
 		name: "Bot",
@@ -526,6 +534,7 @@ exports.grouplist = [
 		jurisdiction: 'u',
 		declare: true,
 		addhtml: true,
+		bypassafktimer: true,
 	},
 	{
 		symbol: '@',
@@ -534,7 +543,7 @@ exports.grouplist = [
 		inherit: '%',
 		jurisdiction: 'u',
 		ban: true,
-		modchat: true,
+		modchatall: true,
 		roomvoice: true,
 		forcerename: true,
 		ip: true,
@@ -563,6 +572,20 @@ exports.grouplist = [
 		jeopardy: true,
 		joinbattle: true,
 		minigame: true,
+		modchat: true,
+	},
+	{
+		symbol: '\u2606',
+		id: "player",
+		name: "Player",
+		inherit: '+',
+		roomvoice: true,
+		modchat: true,
+		roomonly: true,
+		joinbattle: true,
+		nooverride: true,
+		editprivacy: true,
+		exportinputlog: true,
 	},
 	{
 		symbol: '+',
@@ -574,7 +597,6 @@ exports.grouplist = [
 	},
 	{
 		symbol: ' ',
-		ip: 's',
 	},
 	{
 		name: 'Locked',

@@ -40,12 +40,14 @@ function splitFirst(str: string, delimiter: string, limit: number = 1) {
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	debug: boolean;
+	replay: boolean;
 	keepAlive: boolean;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean} = {}) {
+	constructor(options: {debug?: boolean, keepAlive?: boolean, replay?: boolean} = {}) {
 		super();
 		this.debug = !!options.debug;
+		this.replay = !!options.replay;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
 	}
@@ -69,13 +71,23 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		}
 	}
 
+	pushMessage(type: string, data: string) {
+		if (this.replay) {
+			if (type === 'update') {
+				this.push(data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'));
+			}
+			return;
+		}
+		this.push(`${type}\n${data}`);
+	}
+
 	_writeLine(type: string, message: string) {
 		switch (type) {
 		case 'start':
 			const options = JSON.parse(message);
 			options.send = (t: string, data: any) => {
 				if (Array.isArray(data)) data = data.join("\n");
-				this.push(`${t}\n${data}`);
+				this.pushMessage(t, data);
 				if (t === 'end' && !this.keepAlive) this.push(null);
 			};
 			if (this.debug) options.debug = true;
@@ -161,17 +173,12 @@ export function getPlayerStreams(stream: BattleStream) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
-				const p1Update = data.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.p1.push(p1Update);
-				const p2Update = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.p2.push(p2Update);
-				// p3 and p4 share update information with p1 and p2 respectively.
-				streams.p3.push(p1Update);
-				streams.p4.push(p2Update);
-				const specUpdate = data.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.spectator.push(specUpdate);
-				const omniUpdate = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*/g, '');
-				streams.omniscient.push(omniUpdate);
+				streams.omniscient.push(Battle.extractUpdateForSide(data, 'omniscient'));
+				streams.spectator.push(Battle.extractUpdateForSide(data, 'spectator'));
+				streams.p1.push(Battle.extractUpdateForSide(data, 'p1'));
+				streams.p2.push(Battle.extractUpdateForSide(data, 'p2'));
+				streams.p3.push(Battle.extractUpdateForSide(data, 'p3'));
+				streams.p4.push(Battle.extractUpdateForSide(data, 'p4'));
 				break;
 			case 'sideupdate':
 				const [side, sideData] = splitFirst(data, `\n`);

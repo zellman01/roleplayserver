@@ -9,14 +9,23 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.aerilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
+		rating: 4.5,
 	},
 	"aftermath": {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
-				this.damage(source.maxhp / 4, source, target, null, true);
+				this.damage(source.baseMaxhp / 4, source, target, null, true);
 			}
 		},
+	},
+	"anticipation": {
+		inherit: true,
+		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective against this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, Hidden Power counts as its determined type, and Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
+	},
+	"contrary": {
+		inherit: true,
+		desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
 	},
 	"damp": {
 		inherit: true,
@@ -29,7 +38,7 @@ let BattleAbilities = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
-		rating: 4.5,
+		rating: 4,
 	},
 	"infiltrator": {
 		inherit: true,
@@ -40,7 +49,7 @@ let BattleAbilities = {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+				this.damage(source.baseMaxhp / 8, source, target, null, true);
 			}
 		},
 	},
@@ -54,6 +63,12 @@ let BattleAbilities = {
 				this.damage(damage, null, null, null, true);
 				return 0;
 			}
+		},
+	},
+	"magicguard": {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') return false;
 		},
 	},
 	"multitype": {
@@ -70,7 +85,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's moves are changed to be Normal type.",
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
-			if (move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
+			if (move.id !== 'struggle' && this.dex.getMove(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
 		},
@@ -83,6 +98,7 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
 		},
+		rating: 5,
 	},
 	"pixilate": {
 		inherit: true,
@@ -91,11 +107,11 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.pixilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
+		rating: 4.5,
 	},
 	"prankster": {
 		inherit: true,
 		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1.",
-		rating: 4.5,
 	},
 	"refrigerate": {
 		inherit: true,
@@ -104,14 +120,19 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.refrigerateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
+		rating: 4.5,
 	},
 	"roughskin": {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+				this.damage(source.baseMaxhp / 8, source, target, null, true);
 			}
 		},
+	},
+	"simple": {
+		inherit: true,
+		desc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 	},
 	"stancechange": {
 		inherit: true,

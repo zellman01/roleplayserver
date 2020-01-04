@@ -16,7 +16,7 @@ class Jeopardy extends Rooms.RoomGame {
 		this.host = user;
 		this.allowRenames = true;
 		this.state = "signups";
-		this.gameid = 'jeopardy';
+		this.gameid = /** @type {ID} */ ('jeopardy');
 		this.title = 'Jeopardy';
 		this.questions = [];
 		this.started = false;
@@ -87,16 +87,16 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 		this.roundstarted = true;
 		if (this.round === 1) {
-			for (let userID in this.players) {
-				let player = this.players[userID];
+			for (let userID in this.playerTable) {
+				let player = this.playerTable[userID];
 				this.points.set(player, 0);
 			}
 		}
 		this.state = 'selecting';
 		let lowest = [];
 		let minpoints;
-		for (let userID in this.players) {
-			let points = this.players[userID].points;
+		for (let userID in this.playerTable) {
+			let points = this.playerTable[userID].points;
 			if (!minpoints) {
 				lowest.push(userID);
 				minpoints = points;
@@ -107,7 +107,7 @@ class Jeopardy extends Rooms.RoomGame {
 				lowest.push(userID);
 			}
 		}
-		this.curPlayer = this.players[lowest[Math.floor(lowest.length * Math.random())]];
+		this.curPlayer = this.playerTable[lowest[Math.floor(lowest.length * Math.random())]];
 		this.prevPlayer = this.curPlayer;
 		this.update();
 		this.nextPlayer();
@@ -134,8 +134,8 @@ class Jeopardy extends Rooms.RoomGame {
 		if (this.question && !this.finals) {
 			buffer += `<table align="left"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
 		}
-		for (let userID in this.players) {
-			let player = this.players[userID];
+		for (let userID in this.playerTable) {
+			let player = this.playerTable[userID];
 			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Chat.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
 		}
 		buffer += "</body></html></div>";
@@ -165,9 +165,9 @@ class Jeopardy extends Rooms.RoomGame {
 
 	select(target, user) {
 		if (this.state !== 'selecting') return "The game of Jeopardy is not in the selection phase.";
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.id];
 		if (!player) return "You are not in the game of Jeopardy.";
-		if (!this.curPlayer || this.curPlayer.userid !== user.userid) return "It is not your turn to select.";
+		if (!this.curPlayer || this.curPlayer.id !== user.id) return "It is not your turn to select.";
 		let params = target.split(",");
 		if (params.length < 2) return "You must specify a row and a column number.";
 		let categoryNumber = parseInt(params[0]);
@@ -189,14 +189,14 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	clearwagers() {
-		for (let userID in this.players) {
-			this.players[userID].wager = null;
+		for (let userID in this.playerTable) {
+			this.playerTable[userID].wager = null;
 		}
 	}
 
 	clearbuzzes() {
-		for (let userID in this.players) {
-			this.players[userID].buzzed = false;
+		for (let userID in this.playerTable) {
+			this.playerTable[userID].buzzed = false;
 		}
 	}
 
@@ -220,8 +220,8 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	allowAllBuzzes() {
-		for (let userID in this.players) {
-			this.players[userID].buzzedEarly = false;
+		for (let userID in this.playerTable) {
+			this.playerTable[userID].buzzedEarly = false;
 		}
 	}
 
@@ -232,7 +232,7 @@ class Jeopardy extends Rooms.RoomGame {
 
 	buzz(user) {
 		if (this.state !== 'buzzing') return "You cannot buzz in at this time.";
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.id];
 		if (!player) return "You are not in the game of Jeopardy.";
 		if (player.buzzed) return "You have already buzzed in to the current question.";
 		if (!this.canBuzz) {
@@ -268,10 +268,10 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	wager(amount, user) {
-		if (this.state !== "wagering" && (!this.finals || this.curPlayer.id !== user.userid)) return "You cannot wager at this time.";
-		let player = this.players[user.userid];
+		if (this.state !== "wagering" && (!this.finals || this.curPlayer.id !== user.id)) return "You cannot wager at this time.";
+		let player = this.playerTable[user.id];
 		if (!player) return "You are not in the game of Jeopardy.";
-		amount = toId(amount);
+		amount = toID(amount);
 		let wager = (amount === 'all' ? player.points : parseInt(amount));
 		if (!wager) return "Your wager must be a number, or 'all'";
 		if (wager < 0) return "You cannot wager a negative amount";
@@ -282,8 +282,8 @@ class Jeopardy extends Rooms.RoomGame {
 		if (!this.finals) {
 			this.dailyDouble();
 		} else {
-			for (let userID in this.players) {
-				let player = this.players[userID];
+			for (let userID in this.playerTable) {
+				let player = this.playerTable[userID];
 				if (!player.wager) return;
 			}
 			clearTimeout(this.timeout);
@@ -291,8 +291,8 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 	}
 	finalWagers() {
-		for (let userID in this.players) {
-			let player = this.players[userID];
+		for (let userID in this.playerTable) {
+			let player = this.playerTable[userID];
 			if (!player.wager) player.wager = 0;
 		}
 		this.question = this.finalQuestion;
@@ -302,7 +302,7 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	doFinals() {
-		this.order = Object.keys(this.players);
+		this.order = Object.keys(this.playerTable);
 		this.doFinalPlayer();
 	}
 
@@ -311,8 +311,8 @@ class Jeopardy extends Rooms.RoomGame {
 			this.revealAnswer();
 			let highest = [];
 			let maxpoints;
-			for (let userID in this.players) {
-				let player = this.players[userID];
+			for (let userID in this.playerTable) {
+				let player = this.playerTable[userID];
 				let points = player.points;
 				if (!maxpoints) {
 					highest.push(player.name);
@@ -328,7 +328,7 @@ class Jeopardy extends Rooms.RoomGame {
 			this.destroy();
 			return;
 		} else {
-			this.curPlayer = this.players[this.order.shift()];
+			this.curPlayer = this.playerTable[this.order.shift()];
 			let answer = this.curPlayer.finalanswer;
 			if (answer) {
 				this.room.add(`${this.curPlayer.name} has answered ${Chat.escapeHTML(answer)}!`);
@@ -346,7 +346,7 @@ class Jeopardy extends Rooms.RoomGame {
 
 	answer(target, user) {
 		if (this.state !== 'answering') return "You cannot answer the question at this time.";
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.id];
 		if (!player) return "You are not in the game of Jeopardy.";
 		if (this.finals) {
 			if (player.finalanswer) return "You have already answered the final jeopardy";
@@ -354,7 +354,7 @@ class Jeopardy extends Rooms.RoomGame {
 			player.send(`You have selected your answer as ${Chat.escapeHTML(target)}`);
 		} else {
 			clearTimeout(this.timeout);
-			if (!this.curPlayer || this.curPlayer.userid !== user.userid) return "It is not your turn to answer.";
+			if (!this.curPlayer || this.curPlayer.id !== user.id) return "It is not your turn to answer.";
 			this.state = "checking";
 			this.room.add(`${user.name} has answered ${Chat.escapeHTML(target)}!`);
 		}
@@ -408,8 +408,8 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	everyBuzzed() {
-		for (let userID in this.players) {
-			if (!this.players[userID].buzzed) return false;
+		for (let userID in this.playerTable) {
+			if (!this.playerTable[userID].buzzed) return false;
 		}
 		return true;
 	}
@@ -554,7 +554,7 @@ exports.commands = {
 
 		categories(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let params = target.split(",");
 			if (params.length !== room.game.categoryCount) return this.errorReply(`You must set exactly ${room.game.categoryCount} categories.`);
 			let reply = room.game.setCategories(params);
@@ -563,7 +563,7 @@ exports.commands = {
 
 		category(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and the category.");
 			let categoryNumber;
@@ -603,11 +603,11 @@ exports.commands = {
 		import(target, room, user) {
 			if (!target) return this.errorReply("You must specify at least one question");
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let params = target.split(",");
 			let dataStart = 0;
 			let catStart, questionStart;
-			if (toId(params[0]) === 'final') {
+			if (toID(params[0]) === 'final') {
 				catStart = 'finals';
 				params.splice(0, 1);
 			} else {
@@ -639,7 +639,7 @@ exports.commands = {
 		dailydouble: 'dd',
 		dd(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and question number");
 			let categoryNumber = parseInt(params[0]);
@@ -657,7 +657,7 @@ exports.commands = {
 		dailydoublehelp: [`/jeopardy dailydouble [category number], [question number] - Set a question to be a daily double.`],
 		view(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and question number");
 			let categoryNumber = parseInt(params[0]);
@@ -670,10 +670,10 @@ exports.commands = {
 		addplayer: 'adduser',
 		adduser(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply("User '" + target + "' not found.");
-			if (room.game.host.userid === targetUser.userid) return this.errorReply("You can't add yourself to the game.");
+			if (room.game.host.id === targetUser.id) return this.errorReply("You can't add yourself to the game.");
 			if (room.game.addPlayer(targetUser)) {
 				room.game.update();
 			} else {
@@ -684,21 +684,21 @@ exports.commands = {
 		incorrect: 'correct',
 		correct(target, room, user, connection, cmd) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let reply = room.game.mark(cmd === 'correct');
 			if (reply) this.errorReply(reply);
 		},
 
 		start(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let reply = room.game.start();
 			if (reply) this.errorReply(reply);
 		},
 		removeplayer: 'removeuser',
 		removeuser(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 			if (room.game.removePlayer(targetUser)) {
@@ -710,7 +710,7 @@ exports.commands = {
 
 		subhost(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 			room.game.host = targetUser;
@@ -719,7 +719,7 @@ exports.commands = {
 
 		state(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			this.sendReply(`The game is currently in the ${room.game.state} state.`);
 		},
 
@@ -733,13 +733,13 @@ exports.commands = {
 
 		pass(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			room.game.nextQuestion();
 		},
 
 		timer(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let amount = parseInt(target);
 			if (!amount || amount < 2 || amount > 120) return this.errorReply("The amount must be a number between 2 and 120.");
 
@@ -750,7 +750,7 @@ exports.commands = {
 
 		finaltimer(target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (user.id !== room.game.host.id) return this.errorReply("This command can only be used by the host.");
 			let amount = parseInt(target);
 			if (!amount || amount < 2 || amount > 300) return this.errorReply("The amount must be a number between 2 and 300.");
 

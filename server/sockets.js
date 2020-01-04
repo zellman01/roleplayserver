@@ -5,23 +5,24 @@
  * Abstraction layer for multi-process SockJS connections.
  *
  * This file handles all the communications between the users'
- * browsers, the networking processes, and users.js in the
+ * browsers, the networking processes, and users.ts in the
  * main process.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
 
-const MINUTES = 60 * 1000;
-
 const cluster = require('cluster');
 const fs = require('fs');
-/** @type {typeof import('../lib/fs').FS} */
-const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
+
+/** @typedef {0 | 1 | 2 | 3 | 4} ChannelID */
+
+/** @type {typeof import('../lib/crashlogger').crashlogger} */
+let crashlogger = require(/** @type {any} */('../.lib-dist/crashlogger')).crashlogger;
 
 const Monitor = {
-	crashlog: require(/** @type {any} */('../.lib-dist/crashlogger')),
+	crashlog: crashlogger,
 };
 
 if (cluster.isMaster) {
@@ -42,24 +43,26 @@ if (cluster.isMaster) {
 			case '*': {
 				// *socketid, ip, protocol
 				// connect
-				let nlPos = data.indexOf('\n');
-				let nlPos2 = data.indexOf('\n', nlPos + 1);
-				Users.socketConnect(worker, id, data.slice(1, nlPos), data.slice(nlPos + 1, nlPos2), data.slice(nlPos2 + 1));
+				const [socketid, ip, protocol] = data.substr(1).split('\n');
+				Users.socketConnect(worker, id, socketid, ip, protocol);
 				break;
 			}
 
 			case '!': {
 				// !socketid
 				// disconnect
-				Users.socketDisconnect(worker, id, data.substr(1));
+				const socketid = data.substr(1);
+				Users.socketDisconnect(worker, id, socketid);
 				break;
 			}
 
 			case '<': {
 				// <socketid, message
 				// message
-				let nlPos = data.indexOf('\n');
-				Users.socketReceive(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
+				const idx = data.indexOf('\n');
+				const socketid = data.substr(1, idx - 1);
+				const message = data.substr(idx + 1);
+				Users.socketReceive(worker, id, socketid, message);
 				break;
 			}
 
@@ -193,7 +196,7 @@ if (cluster.isMaster) {
 	};
 
 	/**
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} message
 	 */
 	exports.roomBroadcast = function (roomid, message) {
@@ -204,7 +207,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} socketid
 	 */
 	exports.roomAdd = function (worker, roomid, socketid) {
@@ -213,7 +216,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} socketid
 	 */
 	exports.roomRemove = function (worker, roomid, socketid) {
@@ -221,7 +224,7 @@ if (cluster.isMaster) {
 	};
 
 	/**
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} message
 	 */
 	exports.channelBroadcast = function (roomid, message) {
@@ -232,12 +235,12 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
-	 * @param {number} channelIndex
+	 * @param {RoomID} roomid
+	 * @param {ChannelID} channelid
 	 * @param {string} socketid
 	 */
-	exports.channelMove = function (worker, roomid, channelIndex, socketid) {
-		worker.send(`.${roomid}\n${channelIndex}\n${socketid}`);
+	exports.channelMove = function (worker, roomid, channelid, socketid) {
+		worker.send(`.${roomid}\n${channelid}\n${socketid}`);
 	};
 
 	/**
@@ -249,8 +252,7 @@ if (cluster.isMaster) {
 	};
 } else {
 	// is worker
-	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
-	global.Config = require('../config/config');
+	global.Config = require(/** @type {any} */('../.server-dist/config-loader')).Config;
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
@@ -281,7 +283,8 @@ if (cluster.isMaster) {
 
 	// It's optional if you don't need these features.
 
-	global.Dnsbl = require('./dnsbl');
+	/** @type {typeof import('./ip-tools').IPTools} */
+	global.IPTools = require(/** @type {any} */('../.server-dist/ip-tools')).IPTools;
 
 	if (Config.crashguard) {
 		// graceful crash
@@ -391,7 +394,7 @@ if (cluster.isMaster) {
 
 	const sockjs = require('sockjs');
 	const options = {
-		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
+		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.4.0-nwjsfix.min.js`,
 		prefix: '/showdown',
 		/**
 		 * @param {string} severity
@@ -402,7 +405,7 @@ if (cluster.isMaster) {
 		},
 	};
 
-	if (Config.wsdeflate) {
+	if (Config.wsdeflate !== null) {
 		try {
 			// @ts-ignore
 			const deflate = require('permessage-deflate').configure(Config.wsdeflate);
@@ -421,30 +424,37 @@ if (cluster.isMaster) {
 	const sockets = new Map();
 	/**
 	 * roomid:socketid:Connection
-	 * @type {Map<string, Map<string, import('sockjs').Connection>>}
+	 * @type {Map<RoomID, Map<string, import('sockjs').Connection>>}
 	 */
 	const rooms = new Map();
 	/**
-	 * roomid:socketid:channelIndex
-	 * @type {Map<string, Map<string, string>>}
+	 * roomid:socketid:channelid
+	 * @type {Map<RoomID, Map<string, ChannelID>>}
 	 */
 	const roomChannels = new Map();
 
-	/** @type {WriteStream} */
-	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
-
-	// Deal with phantom connections.
-	const sweepSocketInterval = setInterval(() => {
-		for (const socket of sockets.values()) {
-			// @ts-ignore
-			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
-				// @ts-ignore
-				logger.write(`Found a ghost connection with protocol xhr-streaming and ready state ${socket._session.readyState}\n`);
-				// @ts-ignore
-				socket._session.recv.didClose();
-			}
+	/**
+	 * @param {string} message
+	 * @param {-1 | ChannelID} channelid
+	 */
+	const extractChannel = (message, channelid) => {
+		if (channelid === -1) {
+			// Grab all privileged messages
+			return message.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
 		}
-	}, 10 * MINUTES);
+
+		// Grab privileged messages channel has access to
+		switch (channelid) {
+		case 1: message = message.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 2: message = message.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 3: message = message.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 4: message = message.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		}
+
+		// Discard remaining privileged messages
+		// Note: the last \n? is for privileged messages that are empty when non-privileged
+		return message.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
+	};
 
 	process.on('message', data => {
 		// console.log('worker received: ' + data);
@@ -453,10 +463,12 @@ if (cluster.isMaster) {
 		let socketid = '';
 		/** @type {Map<string, import('sockjs').Connection> | undefined?} */
 		let room = null;
-		let roomid = '';
-		/** @type {Map<string, string> | undefined?} */
+		/** @type {RoomID} */
+		let roomid = /** @type {RoomID} */('');
+		/** @type {Map<string, ChannelID> | undefined?} */
 		let roomChannel = null;
-		let channelid = '';
+		/** @type {ChannelID} */
+		let channelid = 0;
 		let nlLoc = -1;
 		let message = '';
 
@@ -544,7 +556,7 @@ if (cluster.isMaster) {
 			nlLoc = data.indexOf('\n');
 			roomid = data.slice(1, nlLoc);
 			let nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			channelid = data.slice(nlLoc + 1, nlLoc2);
+			channelid = /** @type {ChannelID} */(Number(data.slice(nlLoc + 1, nlLoc2)));
 			socketid = data.slice(nlLoc2 + 1);
 
 			roomChannel = roomChannels.get(roomid);
@@ -552,7 +564,7 @@ if (cluster.isMaster) {
 				roomChannel = new Map();
 				roomChannels.set(roomid, roomChannel);
 			}
-			if (channelid === '0') {
+			if (channelid === 0) {
 				roomChannel.delete(socketid);
 			} else {
 				roomChannel.set(socketid, channelid);
@@ -567,31 +579,14 @@ if (cluster.isMaster) {
 			room = rooms.get(roomid);
 			if (!room) return;
 
-			/** @type {[string?, string?, string?]} */
-			let messages = [null, null, null];
+			/** @type {[string?, string?, string?, string?, string?]} */
+			const messages = [null, null, null, null, null];
 			message = data.substr(nlLoc + 1);
 			roomChannel = roomChannels.get(roomid);
 			for (const [socketid, socket] of room) {
-				switch (roomChannel ? roomChannel.get(socketid) : '0') {
-				case '1':
-					if (!messages[1]) {
-						messages[1] = message.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-					}
-					socket.write(messages[1]);
-					break;
-				case '2':
-					if (!messages[2]) {
-						messages[2] = message.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-					}
-					socket.write(messages[2]);
-					break;
-				default:
-					if (!messages[0]) {
-						messages[0] = message.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-					}
-					socket.write(messages[0]);
-					break;
-				}
+				channelid = (roomChannel && roomChannel.get(socketid)) || 0;
+				if (!messages[channelid]) messages[channelid] = extractChannel(message, channelid);
+				socket.write(/** @type {string} */(messages[channelid]));
 			}
 			break;
 		}
@@ -600,9 +595,7 @@ if (cluster.isMaster) {
 	// Clean up any remaining connections on disconnect. If this isn't done,
 	// the process will not exit until any remaining connections have been destroyed.
 	// Afterwards, the worker process will die on its own.
-	process.once('disconnect', () => {
-		clearInterval(sweepSocketInterval);
-
+	const cleanup = () => {
 		for (const socket of sockets.values()) {
 			try {
 				socket.destroy();
@@ -617,10 +610,13 @@ if (cluster.isMaster) {
 
 		// Let the server(s) finish closing.
 		setImmediate(() => process.exit(0));
-	});
+	};
+
+	process.once('disconnect', cleanup);
+	process.once('exit', cleanup);
 
 	// this is global so it can be hotpatched if necessary
-	let isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
+	let isTrustedProxyIp = Config.proxyip ? IPTools.checker(Config.proxyip) : () => false;
 	let socketCounter = 0;
 	server.on('connection', socket => {
 		// For reasons that are not entirely clear, SockJS sometimes triggers
@@ -636,7 +632,7 @@ if (cluster.isMaster) {
 			return;
 		}
 
-		let socketid = '' + (++socketCounter);
+		const socketid = '' + (++socketCounter);
 		sockets.set(socketid, socket);
 
 		let socketip = socket.remoteAddress;
@@ -651,23 +647,6 @@ if (cluster.isMaster) {
 					break;
 				}
 			}
-		}
-
-		// xhr-streamming connections sometimes end up becoming ghost
-		// connections. Since it already has keepalive set, we set a timeout
-		// instead and close the connection if it has been inactive for the
-		// configured SockJS heartbeat interval plus an extra second to account
-		// for any delay in receiving the SockJS heartbeat packet.
-		if (socket.protocol === 'xhr-streaming') {
-			// @ts-ignore
-			socket._session.recv.thingy.setTimeout(
-				// @ts-ignore
-				socket._session.recv.options.heartbeat_delay + 1000,
-				() => {
-					// @ts-ignore
-					if (socket._session.recv) socket._session.recv.didClose();
-				}
-			);
 		}
 
 		// @ts-ignore
@@ -704,9 +683,10 @@ if (cluster.isMaster) {
 	console.log(`Worker ${cluster.worker.id} now listening on ${Config.bindaddress}:${Config.port}`);
 
 	if (appssl) {
-		// @ts-ignore
 		server.installHandlers(appssl, {});
+		// @ts-ignore - if appssl exists, then `Config.ssl` must also exist
 		appssl.listen(Config.ssl.port, Config.bindaddress);
+		// @ts-ignore - if appssl exists, then `Config.ssl` must also exist
 		console.log(`Worker ${cluster.worker.id} now listening for SSL on port ${Config.ssl.port}`);
 	}
 
