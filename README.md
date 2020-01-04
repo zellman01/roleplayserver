@@ -7,10 +7,10 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
   [2]: https://github.com/smogon/pokemon-showdown-client
   [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
-[![Build Status](https://travis-ci.com/smogon/pokemon-showdown.svg?branch=master)](https://travis-ci.com/smogon/pokemon-showdown)
-[![Dependency Status](https://david-dm.org/zarel/Pokemon-Showdown.svg)](https://david-dm.org/zarel/Pokemon-Showdown)
-[![devDependency Status](https://david-dm.org/zarel/Pokemon-Showdown/dev-status.svg)](https://david-dm.org/zarel/Pokemon-Showdown?type=dev)
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/Zarel/Pokemon-Showdown.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Zarel/Pokemon-Showdown/alerts)
+[![Build Status](https://api.travis-ci.com/zellman01/roleplayserver.svg)](https://travis-ci.com/zellman01/roleplayserver)
+[![Dependency Status](https://david-dm.org/zellman01/roleplayserver.svg)](https://david-dm.org/zellman01/roleplayserver)
+[![devDependency Status](https://david-dm.org/zellman01/roleplayserver/dev-status.svg)](https://david-dm.org/zellman01/roleplayserver?type=dev)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/zellman01/roleplayserver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/zellman01/roleplayserver/alerts)
 
 Introduction
 ------------------------------------------------------------------------
