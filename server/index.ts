@@ -116,9 +116,13 @@ global.Punishments = Punishments;
 import {Rooms} from './rooms';
 global.Rooms = Rooms;
 
+global.Db = require('nef')(require('nef-fs')('config/db'));
+
 import * as Verifier from './verifier';
 global.Verifier = Verifier;
 Verifier.PM.spawn();
+
+global.RPC = {};
 
 import {Tournaments} from './tournaments';
 global.Tournaments = Tournaments;
