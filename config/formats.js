@@ -6,6 +6,28 @@
 /**@type {(FormatsData | {section: string, column?: number})[]} */
 let Formats = [
 
+	// RP Section
+	///////////////////////////////////////////////////////////////////
+	
+	{
+		section: "RP Formats",
+	},
+	{
+		name: "[Gen 8] Trainer",
+
+		mod: 'gen8',
+		rated: false,
+		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause', 'Standard NatDex'],
+	},
+	{
+		name: "[Gen 8] Double Trainer",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		rated: false,
+		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause', 'Standard NatDex'],
+	},
+	
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
 
