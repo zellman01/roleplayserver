@@ -4,6 +4,8 @@
   "description": "The server for the Pokémon Showdown battle simulator",
   "version": "0.11.2",
   "dependencies": {
+    "nef": "^1.1.0",
+    "nef-fs": "^1.0.0",
     "bufferutil": "^4.0.1",
     "probe-image-size": "^5.0.0",
     "sockjs": "0.3.19",
