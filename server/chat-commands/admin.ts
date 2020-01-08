@@ -69,6 +69,31 @@ export const commands: ChatCommands = {
 	addrankhtmlboxhelp: [
 		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
 	],
+	staffannounce: 'roomstaffannounce',
+	roomstaffannounce(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help ' + cmd);
+		if (!this.canTalk()) return;
+		if (!this.can('ban', null, room)) return;
+		this.room.sendRankedUsers(`|html|<div class="broadcast-green"><b>Room moderation declare by ${user.name}</b><br />${target}</div>`, '%');
+	},
+	roomstaffannouncehelp: [
+		`/staffannounce [message] - Shows all room staff members a message only they can see. Requires @ * # & ~`,
+	],
+	globalannounce: 'globalstaffannounce',
+	globalstaffannounce(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help ' + cmd);
+		if (!this.can('declare')) return;
+		for (const [id, curRoom] of Rooms.rooms) {
+			if (id === 'global') continue;
+				if (curRom.staffRoom) {
+					curRoom.addRaw(`<div class="broadcast-red"><b>Gobal moderation declare by ${user.name}</b><br />${target}</div>`);
+					curRoom.update();
+				}
+		}
+	},
+	globalstaffannouncehelp: [
+		`/globalannounce [message] - Shows all global staff a message only they can see. Requires & ~`,
+	],
 	changeuhtml: 'adduhtml',
 	adduhtml(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
