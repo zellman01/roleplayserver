@@ -8,7 +8,7 @@ let Formats = [
 
 	// RP Section
 	///////////////////////////////////////////////////////////////////
-	
+
 	{
 		section: "RP Formats",
 	},
@@ -27,7 +27,7 @@ let Formats = [
 		rated: false,
 		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause', 'Standard NatDex'],
 	},
-	
+
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
 
