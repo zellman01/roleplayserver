@@ -1801,6 +1801,7 @@ const commands = {
 				`- /roomdevoice <em>username</em>: remove a room voice`,
 				`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
 				`- /roomsettings: change a variety of room settings, namely modchat`,
+				`- /staffannopunce <em>message</em>: send a message to only room/global staff members in the room`,
 			],
 			[
 				`<strong>Room owners (#)</strong> can also use:`,
