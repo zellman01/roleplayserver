@@ -116,7 +116,9 @@ global.Punishments = Punishments;
 import {Rooms} from './rooms';
 global.Rooms = Rooms;
 
-global.Db = require('nef')(require('nef-fs')('config/db'));
+import {Db} from '././node_modules/nef';
+import {Dbfs} from '././node_modules/nef-fs';
+global.Db = Db(Dbfs('config/db'));
 
 import * as Verifier from './verifier';
 global.Verifier = Verifier;
