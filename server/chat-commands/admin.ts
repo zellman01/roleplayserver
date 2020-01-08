@@ -85,7 +85,7 @@ export const commands: ChatCommands = {
 		if (!this.can('declare')) return;
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (id === 'global') continue;
-			if (curRom.staffRoom) {
+			if (curRoom.staffRoom) {
 				curRoom.addRaw(`<div class="broadcast-red"><b>Gobal moderation declare by ${user.name}</b><br />${target}</div>`);
 				curRoom.update();
 			}
