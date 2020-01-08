@@ -116,10 +116,6 @@ global.Punishments = Punishments;
 import {Rooms} from './rooms';
 global.Rooms = Rooms;
 
-/*import {Db} from '../../node_modules/nef';
-import {Dbfs} from '../../node_modules/nef-fs';
-global.Db = Db(Dbfs('config/db'));*/
-
 import * as Verifier from './verifier';
 global.Verifier = Verifier;
 Verifier.PM.spawn();
