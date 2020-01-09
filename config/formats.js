@@ -14,6 +14,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] Trainer",
+		desc: `Like custom game, but lets you keep Pok&eacute;mon hidden.`,
 
 		mod: 'gen8',
 		rated: false,
@@ -21,6 +22,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] Double Trainer",
+		desc: `Like [Gen 8] Trainer, but two Pok&eacute;mon`,
 
 		mod: 'gen8',
 		gameType: 'doubles',
@@ -29,18 +31,20 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] Trainer",
+		desc: `Like [Gen 8] Trainer, but only Generation 7`,
 
 		mod: 'gen7',
 		rated: false,
-		ruleset:['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
+		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
 	},
 	{
 		name: "[Gen 7] Double Trainer",
+		desc: `Like [Gen 8] Double Trainer, but only Generation 7`,
 
 		mod: 'gen7',
 		gameType: 'doubles',
 		rated: false,
-		ruleset:['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
+		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
 	},
 
 	// Sw/Sh Singles
