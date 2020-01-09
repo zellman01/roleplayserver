@@ -69,12 +69,18 @@ export const commands: ChatCommands = {
 	addrankhtmlboxhelp: [
 		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
 	],
+	adstaffannounce: 'roomstaffannounce',
 	staffannounce: 'roomstaffannounce',
 	roomstaffannounce(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
-		if (!this.can('ban', null, room)) return;
-		this.room.sendRankedUsers(`|html|<div class="broadcast-green"><b>Room moderation declare by ${user.name}</b><br />${target}</div>`, '%');
+		if (this.can('rawpacket') && cmd === 'adstaffannounce') {
+			this.room.sendRankedUsers(`|html|<div class="broadcast-red"><b>Room moderation declare by Server Administrator ${user.name}</b><br />${target}</div>`, '%');
+		} else if (this.can('ban', null, room)) {
+			this.room.sendRankedUsers(`|html|<div class="broadcast-green"><b>Room moderation declare by ${user.name}</b><br />${target}</div>`, '%');
+		} else {
+			return;
+		}
 	},
 	roomstaffannouncehelp: [
 		`/staffannounce [message] - Shows all room staff members a message only they can see. Requires @ * # & ~`,
