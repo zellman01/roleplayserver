@@ -27,6 +27,21 @@ let Formats = [
 		rated: false,
 		ruleset: ['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause', 'Standard NatDex'],
 	},
+	{
+		name: "[Gen 7] Trainer",
+
+		mod: 'gen7',
+		rated: false,
+		ruleset:['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
+	},
+	{
+		name: "[Gen 7] Double Trainer",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		rated: false,
+		ruleset:['Cancel Mod', 'HP Percentage Mod', 'CFZ Clause'],
+	},
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
