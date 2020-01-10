@@ -1066,15 +1066,11 @@ exports.commands = {
 		Users.setOfflineGroup(name, nextGroup);
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
-			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid, '(demote)');
-			Rooms.global.modlog("GLOBALDEMOTE", name, ` by ${user.id} to ${groupName}`);
+			this.globalModlog("GLOBALDEMOTE", name, ` by ${user.id} to ${groupName}`);
 			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);
 		} else {
 			this.addModAction(`${name} was promoted to ${groupName} by ${user.name}.`);
-			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid);
-			if (groupName !== "voice") {
-				Rooms.global.modlog("GLOBALPROMOTE", name, ` by ${user.id} to ${groupName}`);
-			}
+			this.globalModlog("GLOBALPROMOTE", name, ` by ${user.id} to ${groupName}`);
 			if (targetUser) targetUser.popup(`You were promoted to ${groupName} by ${user.name}.`);
 		}
 
